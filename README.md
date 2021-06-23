@@ -1,1 +1,1 @@
-# wta-ensemble
+# Winner-Take-All Ensemble Neural Network
