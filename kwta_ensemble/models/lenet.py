@@ -114,7 +114,33 @@ class LeNet(torch.nn.Module):
 
     @staticmethod
     def compute_max_out(dim: int) -> int:
+        """
+        Computes the max pooling layer output size.
+
+        Parameters
+        ----------
+        dim: int
+            The dimensionality of the input to the max pooling layer.
+
+        Returns
+        -------
+        int
+            The output size of the max pooling layer.
+        """
         return int(dim - 2) / 2 + 1
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
+        """
+        Defines the forward pass by the model.
+
+        Parameter
+        ---------
+        features: torch.Tensor
+            The input features.
+
+        Returns
+        -------
+        torch.Tensor
+            The model output.
+        """
         return self.layers(features)
