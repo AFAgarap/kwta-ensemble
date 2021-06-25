@@ -23,6 +23,7 @@ import torch
 class Model(torch.nn.Module):
     def __init__(self):
         super().__init__()
+        self.criterion = torch.nn.CrossEntropyLoss()
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError
