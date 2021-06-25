@@ -51,6 +51,15 @@ class Ensemble(torch.nn.Module):
         super().__init__()
 
     def reset_parameters(self, modules: torch.nn.Module) -> None:
+        """
+        Performs parameter reset to avoid
+        use of identical weights for each expert network.
+
+        Parameter
+        ---------
+        modules: torch.nn.Module
+            The class layer whose weights will be reset.
+        """
         if isinstance(modules, torch.nn.Linear) or isinstance(modules, torch.nn.Conv2d):
             modules.reset_parameters()
 
