@@ -73,4 +73,9 @@ class Ensemble(torch.nn.Module):
             modules.reset_parameters()
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
-        pass
+        outputs = []
+        for network in self.model:
+            outputs.append(network(features))
+        outputs = torch.stack(outputs, dim=1)
+        logits = torch.mean(outputs, dim=1)
+        return logits
