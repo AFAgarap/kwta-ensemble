@@ -56,6 +56,8 @@ class Ensemble(torch.nn.Module):
             network = deepcopy(network)
             network.apply(self.reset_parameters)
             self.model.add_module(f"network_{index}", network)
+        self.device = device
+        self.to(self.device)
 
     def reset_parameters(self, modules: torch.nn.Module) -> None:
         """
