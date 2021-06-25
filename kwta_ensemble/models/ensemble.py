@@ -59,19 +59,6 @@ class Ensemble(torch.nn.Module):
         self.device = device
         self.to(self.device)
 
-    def reset_parameters(self, modules: torch.nn.Module) -> None:
-        """
-        Performs parameter reset to avoid
-        use of identical weights for each expert network.
-
-        Parameter
-        ---------
-        modules: torch.nn.Module
-            The class layer whose weights will be reset.
-        """
-        if isinstance(modules, torch.nn.Linear) or isinstance(modules, torch.nn.Conv2d):
-            modules.reset_parameters()
-
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         """
         The forward pass by the model.
