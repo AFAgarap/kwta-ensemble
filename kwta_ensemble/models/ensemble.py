@@ -19,7 +19,17 @@ import torch
 
 
 class Ensemble(torch.nn.Module):
-    def __init__(self):
+    def __init__(
+        self,
+        network: torch.nn.Module,
+        num_learners: int = 3,
+        optimizer: str = "sgd",
+        learning_rate: float = 1e-3,
+        weight_decay: float = 1e-5,
+        device: torch.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu"
+        ),
+    ):
         super().__init__()
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
