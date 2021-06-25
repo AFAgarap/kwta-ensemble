@@ -23,9 +23,34 @@ import torch
 
 
 class Model(torch.nn.Module):
-    def __init__(self):
+    def __init__(
+        self, optimizer: str, learning_rate: float, weight_decay: float = 1e-5
+    ):
         super().__init__()
         self.criterion = torch.nn.CrossEntropyLoss()
+        if optimizer == "sgd":
+            self.optimizer = torch.optim.SGD(
+                params=filter(
+                    lambda parameters: parameters.requires_grad, self.parameters()
+                ),
+                lr=learning_rate,
+                momentum=9e-1,
+                weight_decay=weight_decay,
+            )
+            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                self.optimizer, patience=2, verbose=True, min_lr=1e-4, factor=1e-1
+            )
+        elif optimizer == "adamw":
+            self.optimizer = torch.optim.AdamW(
+                params=filter(
+                    lambda parameters: parameters.requires_grad, self.parameters()
+                ),
+                lr=learning_rate,
+                weight_decay=weight_decay,
+            )
+            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                self.optimizer, patience=1, verbose=True, min_lr=1e-4, factor=1e-2
+            )
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError
