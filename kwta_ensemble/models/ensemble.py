@@ -50,7 +50,9 @@ class Ensemble(torch.nn.Module):
         device: torch.device
             The device to use for computation.
         """
-        super().__init__()
+        super().__init__(
+            optimizer=optimizer, learning_rate=learning_rate, weight_decay=weight_decay
+        )
         self.model = torch.nn.Sequential()
         for index in range(num_learners):
             network = deepcopy(network)
