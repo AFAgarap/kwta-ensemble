@@ -15,6 +15,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Implementation of ensemble neural network"""
+from copy import deepcopy
+
 import torch
 
 
@@ -49,6 +51,11 @@ class Ensemble(torch.nn.Module):
             The device to use for computation.
         """
         super().__init__()
+        self.model = torch.nn.Sequential()
+        for index in range(num_learners):
+            network = deepcopy(network)
+            network.apply(self.reset_parameters)
+            self.model.add_module(f"network_{index}", network)
 
     def reset_parameters(self, modules: torch.nn.Module) -> None:
         """
