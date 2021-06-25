@@ -30,6 +30,24 @@ class Ensemble(torch.nn.Module):
             "cuda:0" if torch.cuda.is_available() else "cpu"
         ),
     ):
+        """
+        Constructs an ensemble of neural networks.
+
+        Parameters
+        ----------
+        network: torch.nn.Module:
+            The learner architecture to use in ensemble.
+        num_learners: int
+            The number of networks to use in ensemble.
+        optimizer: str
+            The optimizer to use.
+        learning_rate: float
+            The learning rate to use for optimization.
+        weight_decay: float
+            The weight decay parameter to use.
+        device: torch.device
+            The device to use for computation.
+        """
         super().__init__()
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
