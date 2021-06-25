@@ -73,6 +73,19 @@ class Ensemble(torch.nn.Module):
             modules.reset_parameters()
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
+        """
+        The forward pass by the model.
+
+        Parameter
+        ---------
+        features: torch.Tensor
+            The input features.
+
+        Returns
+        -------
+        logits: torch.Tensor
+            The model outputs.
+        """
         outputs = []
         for network in self.model:
             outputs.append(network(features))
