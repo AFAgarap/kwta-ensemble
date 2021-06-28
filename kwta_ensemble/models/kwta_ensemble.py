@@ -15,3 +15,17 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Implementation of kWTA-ENN"""
+from typing import Dict, Tuple
+
+import torch
+
+
+class kWTAEnsemble(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        pass
+
+    def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
+        pass
