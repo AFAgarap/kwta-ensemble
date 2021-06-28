@@ -24,6 +24,15 @@ class WinnersTakeAllLayer(torch.nn.Module):
     """
 
     def __init__(self, sparsity: float = 3e-1):
+        """
+        Builds the k-Winners-Take-All layer.
+
+        Parameter
+        ---------
+        sparsity: float
+            The percentage of winners to take
+            from the competition.
+        """
         super().__init__()
         self.sparsity = sparsity
 
