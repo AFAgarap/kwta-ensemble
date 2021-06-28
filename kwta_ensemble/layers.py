@@ -19,6 +19,10 @@ import torch
 
 
 class WinnersTakeAllLayer(torch.nn.Module):
+    """
+    The k-Winners-Take-All layer.
+    """
+
     def __init__(self, sparsity: float = 3e-1):
         super().__init__()
         self.sparsity = sparsity
