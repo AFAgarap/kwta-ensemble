@@ -15,3 +15,12 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Implementation of k-Winners-Take-All layer"""
+import torch
+
+
+class WinnersTakeAllLayer(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        pass
