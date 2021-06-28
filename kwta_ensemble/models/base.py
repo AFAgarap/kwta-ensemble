@@ -23,6 +23,10 @@ import torch
 
 
 class Model(torch.nn.Module):
+    """
+    Super class for ensemble models.
+    """
+
     def __init__(
         self,
         optimizer: str,
