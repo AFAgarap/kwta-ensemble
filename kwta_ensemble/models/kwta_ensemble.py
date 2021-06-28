@@ -39,6 +39,7 @@ class kWTAEnsemble(Model):
         ),
     ):
         super().__init__()
+        self.num_experts = num_experts
         self.experts = torch.nn.Sequential()
         for index in range(num_experts):
             expert_model = deepcopy(expert_model)
