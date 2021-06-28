@@ -52,6 +52,7 @@ class kWTAEnsemble(Model):
             ),
             WinnersTakeAllLayer(sparsity=sparsity),
         )
+        self.competition_delay = competition_delay
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         pass
