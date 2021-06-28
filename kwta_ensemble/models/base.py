@@ -24,7 +24,13 @@ import torch
 
 class Model(torch.nn.Module):
     def __init__(
-        self, optimizer: str, learning_rate: float, weight_decay: float = 1e-5
+        self,
+        optimizer: str,
+        learning_rate: float,
+        weight_decay: float = 1e-5,
+        device: torch.device = torch.device(
+            "cuda:0" if torch.cuda.is_available else "cpu"
+        ),
     ):
         super().__init__()
         self.criterion = torch.nn.CrossEntropyLoss()
@@ -51,6 +57,12 @@ class Model(torch.nn.Module):
             self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
                 self.optimizer, patience=1, verbose=True, min_lr=1e-4, factor=1e-2
             )
+        self.device = device
+        self.to(self.device)
+        self.train_loss = []
+        self.train_accuracy = []
+        self.valid_loss = []
+        self.valid_accuracy = []
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError
