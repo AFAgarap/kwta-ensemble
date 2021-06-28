@@ -19,8 +19,10 @@ from typing import Dict, Tuple
 
 import torch
 
+from kwta_ensemble.models.base import Model
 
-class kWTAEnsemble(torch.nn.Module):
+
+class kWTAEnsemble(Model):
     def __init__(self):
         super().__init__()
 
