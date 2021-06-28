@@ -36,6 +36,20 @@ class Model(torch.nn.Module):
             "cuda:0" if torch.cuda.is_available else "cpu"
         ),
     ):
+        """
+        Builds the super class for ensemble models.
+
+        Parameters
+        ----------
+        optimizer: str
+            The optimization algorithm to use.
+        learning_rate: float
+            The learning rate to use for optimization.
+        weight_decay: float
+            The weight decay to use for regularization.
+        device: torch.device
+            The device to use for computations.
+        """
         super().__init__()
         self.criterion = torch.nn.CrossEntropyLoss()
         if optimizer == "sgd":
