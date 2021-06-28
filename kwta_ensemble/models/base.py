@@ -23,6 +23,10 @@ import torch
 
 
 class Model(torch.nn.Module):
+    """
+    Super class for ensemble models.
+    """
+
     def __init__(
         self,
         optimizer: str,
@@ -32,6 +36,20 @@ class Model(torch.nn.Module):
             "cuda:0" if torch.cuda.is_available else "cpu"
         ),
     ):
+        """
+        Builds the super class for ensemble models.
+
+        Parameters
+        ----------
+        optimizer: str
+            The optimization algorithm to use.
+        learning_rate: float
+            The learning rate to use for optimization.
+        weight_decay: float
+            The weight decay to use for regularization.
+        device: torch.device
+            The device to use for computations.
+        """
         super().__init__()
         self.criterion = torch.nn.CrossEntropyLoss()
         if optimizer == "sgd":
@@ -65,6 +83,14 @@ class Model(torch.nn.Module):
         self.valid_accuracy = []
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
+        """
+        The forward pass by the model.
+
+        Parameter
+        ---------
+        features: torch.Tensor
+            The input features.
+        """
         raise NotImplementedError
 
     def reset_parameters(self, modules: torch.nn.Module) -> None:
@@ -81,6 +107,18 @@ class Model(torch.nn.Module):
             modules.reset_parameters()
 
     def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
+        """
+        Performs single epoch training for model.
+
+        Parameters
+        ----------
+        data_loaders: Dict
+            The data loaders to use for
+            training and validation.
+        phase: str
+            The phase of training,
+            whether training or validation.
+        """
         raise NotImplementedError
 
     def fit(
