@@ -1,4 +1,4 @@
-# Winner-Take-All Ensemble Neural Network
+# k-Winners-Take-All Ensemble Neural Network
 # Copyright (C) 2021  Abien Fred Agarap
 #
 # This program is free software; you can redistribute it and/or modify
