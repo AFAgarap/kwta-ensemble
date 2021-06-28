@@ -19,8 +19,9 @@ import torch
 
 
 class WinnersTakeAllLayer(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, sparsity: float = 3e-1):
         super().__init__()
+        self.sparsity = sparsity
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         pass
