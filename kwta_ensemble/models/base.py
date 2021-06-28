@@ -107,6 +107,18 @@ class Model(torch.nn.Module):
             modules.reset_parameters()
 
     def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
+        """
+        Performs single epoch training for model.
+
+        Parameters
+        ----------
+        data_loaders: Dict
+            The data loaders to use for
+            training and validation.
+        phase: str
+            The phase of training,
+            whether training or validation.
+        """
         raise NotImplementedError
 
     def fit(
