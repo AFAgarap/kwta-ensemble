@@ -54,8 +54,22 @@ class kWTAEnsemble(Model):
         )
         self.competition_delay = competition_delay
 
-    def forward(self, features: torch.Tensor) -> torch.Tensor:
-        pass
+    def forward(self, features: torch.Tensor, epoch: int = 0) -> torch.Tensor:
+        outputs = []
+        for index in range(self.num_experts):
+            output = self.experts[index](features)
+            outputs.append(output)
+        outputs = torch.cat(outputs, dim=1)
+        activations = {}
+        for index, layer in enumerate(self.competitive_layer):
+            if index < 1:
+                activations[index] = (
+                    layer(outputs) if index == 0 else layer(activations.get(index - 1))
+                )
+            elif (index == 1 and epoch >= self.competition_delay) or not self.training:
+                activations[index] = layer(activations.get(index - 1))
+        outputs = activations.get(len(activations) - 1)
+        return outputs
 
     def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
         pass
