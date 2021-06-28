@@ -83,6 +83,14 @@ class Model(torch.nn.Module):
         self.valid_accuracy = []
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
+        """
+        The forward pass by the model.
+
+        Parameter
+        ---------
+        features: torch.Tensor
+            The input features.
+        """
         raise NotImplementedError
 
     def reset_parameters(self, modules: torch.nn.Module) -> None:
