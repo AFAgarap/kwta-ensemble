@@ -21,6 +21,7 @@ from typing import Dict, Tuple
 import torch
 
 from kwta_ensemble.models.base import Model
+from kwta_ensemble.layers import WinnersTakeAllLayer
 
 
 class kWTAEnsemble(Model):
@@ -45,6 +46,12 @@ class kWTAEnsemble(Model):
             expert_model = deepcopy(expert_model)
             expert_model.apply(self.reset_parameters)
             self.experts.add_module(f"expert_{index}", expert_model)
+        self.competitive_layer = torch.nn.Sequential(
+            torch.nn.Linear(
+                in_features=(num_classes * num_experts), out_features=num_classes
+            ),
+            WinnersTakeAllLayer(sparsity=sparsity),
+        )
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         pass
