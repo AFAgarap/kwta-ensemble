@@ -15,6 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Implementation of kWTA-ENN"""
+from copy import deepcopy
 from typing import Dict, Tuple
 
 import torch
@@ -38,6 +39,11 @@ class kWTAEnsemble(Model):
         ),
     ):
         super().__init__()
+        self.experts = torch.nn.Sequential()
+        for index in range(num_experts):
+            expert_model = deepcopy(expert_model)
+            expert_model.apply(self.reset_parameters)
+            self.experts.add_module(f"expert_{index}", expert_model)
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         pass
