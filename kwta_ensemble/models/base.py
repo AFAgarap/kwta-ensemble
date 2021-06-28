@@ -59,6 +59,10 @@ class Model(torch.nn.Module):
             )
         self.device = device
         self.to(self.device)
+        self.train_loss = []
+        self.train_accuracy = []
+        self.valid_loss = []
+        self.valid_accuracy = []
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError
