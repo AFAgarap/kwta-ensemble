@@ -25,7 +25,7 @@ class WinnersTakeAllLayer(torch.nn.Module):
 
     def __init__(self, sparsity: float = 3e-1):
         """
-        Builds the k-Winners-Take-All layer.
+        Builds the k-Winners-Take-All (kWTA) layer.
 
         Parameter
         ---------
@@ -37,6 +37,19 @@ class WinnersTakeAllLayer(torch.nn.Module):
         self.sparsity = sparsity
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
+        """
+        The forward pass of kWTA layer.
+
+        Parameter
+        ---------
+        features: torch.Tensor
+            The input features.
+
+        Returns
+        -------
+        activations: torch.Tensor
+            The kWTA units.
+        """
         top_k = int(self.sparsity * features.shape[1])
         winners = features.topk(top_k, dim=1)[0][:, -1]
         winners = winners.expand(features.shape[1], features.shape[0]).permute(1, 0)
