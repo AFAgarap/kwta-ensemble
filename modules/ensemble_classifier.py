@@ -53,6 +53,14 @@ def main(arguments):
         arguments.code_dim,
     )
 
+    results = dict()
+    for num_learner in range(2, num_learners + 1):
+        accuracies = []
+        for seed in seeds:
+            print()
+            print(f"[INFO] Dataset: {dataset}")
+            print(f"[INFO] Number of learners: {num_learner}")
+            print(f"[INFO] Seed: {seed}")
 
 
 def parse_args():
