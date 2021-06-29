@@ -18,8 +18,41 @@
 import argparse
 
 
-def main():
-    pass
+def main(arguments):
+    (
+        seeds,
+        dataset,
+        vectorizer,
+        ngram_range,
+        batch_size,
+        optimizer,
+        learning_rate,
+        weight_decay,
+        epochs,
+        num_learners,
+        learner_architecture,
+        show_every,
+        use_feature_extractor,
+        feature_extractor_arch,
+        code_dim,
+    ) = (
+        arguments.seeds,
+        arguments.dataset,
+        arguments.vectorizer,
+        arguments.ngram_range,
+        arguments.batch_size,
+        arguments.optimizer,
+        arguments.learning_rate,
+        arguments.weight_decay,
+        arguments.epochs,
+        arguments.num_learners,
+        arguments.learner_architecture,
+        arguments.show_every,
+        arguments.use_feature_extractor,
+        arguments.feature_extractor_arch,
+        arguments.code_dim,
+    )
+
 
 
 def parse_args():
