@@ -196,6 +196,15 @@ class Model(torch.nn.Module):
         self.load_state_dict(best_model_weights)
 
     def save_model(self, filename: str) -> None:
+        """
+        Exports the trained model to
+        outputs/models directory.
+
+        Parameter
+        ---------
+        filename: str
+            The filename for the exported model.
+        """
         print("[INFO] Exporting trained model...")
         model_name = filename.split("-", 6)[2]
         dataset_name = filename.split("-", 6)[5]
