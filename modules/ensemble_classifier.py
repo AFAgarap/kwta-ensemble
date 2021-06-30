@@ -31,8 +31,8 @@ def main(arguments):
         learning_rate,
         weight_decay,
         epochs,
-        num_learners,
-        learner_architecture,
+        num_subnetworks,
+        subnetwork_architecture,
         show_every,
         use_feature_extractor,
         feature_extractor_arch,
@@ -153,13 +153,13 @@ def parse_args():
     )
     group.add_argument(
         "-nl",
-        "--num_learners",
+        "--num_subnetworks",
         type=int,
         default=3,
-        help="the number of learners to instantiate, default: [3]",
+        help="the number of subnetworks to instantiate, default: [3]",
     )
     group.add_argument(
-        "--learner_architecture",
+        "--subnetwork_architecture",
         type=str,
         default="dnn",
         help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
