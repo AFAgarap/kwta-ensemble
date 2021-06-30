@@ -17,6 +17,8 @@
 """Ensemble classifier"""
 import argparse
 
+from kwta_ensemble.utils import set_global_seed
+
 
 def main(arguments):
     (
@@ -61,6 +63,8 @@ def main(arguments):
             print(f"[INFO] Dataset: {dataset}")
             print(f"[INFO] Number of learners: {num_learner}")
             print(f"[INFO] Seed: {seed}")
+
+            set_global_seed(seed=seed)
 
 
 def parse_args():
