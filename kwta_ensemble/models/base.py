@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Implementation of model super class"""
 from copy import deepcopy
+import os
 import time
 from typing import Dict, Tuple
 
@@ -193,3 +194,15 @@ class Model(torch.nn.Module):
         print()
 
         self.load_state_dict(best_model_weights)
+
+    def save_model(self, filename: str) -> None:
+        print("[INFO] Exporting trained model...")
+        model_name = filename.split("-", 6)[2]
+        dataset_name = filename.split("-", 6)[5]
+        model_path = os.path.join("outputs", "models", model_name, dataset_name)
+        if not os.path.exists(model_path):
+            os.makedirs(model_path)
+        filename = f"{filename}.pth"
+        filename = os.path.join(model_path, filename)
+        torch.save(self.state_dict(), filename)
+        print(f"[SUCCESS] Trained model exported to {filename}")
