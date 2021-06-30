@@ -17,7 +17,7 @@
 """Ensemble classifier"""
 import argparse
 
-from kwta_ensemble.models import CNN, DNN, LeNet
+from kwta_ensemble.models import CNN, DNN, Ensemble, LeNet
 from kwta_ensemble.utils import create_dataloaders, set_global_seed
 
 
@@ -51,7 +51,7 @@ def main(arguments):
     )
 
     results = dict()
-    for num_learner in range(2, num_subnetworks + 1):
+    for num_subnetwork in range(2, num_subnetworks + 1):
         accuracies = []
         for seed in seeds:
             print()
@@ -90,6 +90,16 @@ def main(arguments):
                     channel_dim=(1 if len(input_shape) < 4 else input_shape[3]),
                     num_classes=num_classes,
                 )
+
+            model = Ensemble(
+                num_features=num_features,
+                input_shape=input_shape,
+                network=subnetwork,
+                num_learners=num_subnetwork,
+                optimizer=optimizer,
+                learning_rate=learning_rate,
+                weight_decay=weight_decay,
+            )
 
 
 def parse_args():
