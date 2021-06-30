@@ -34,9 +34,6 @@ def main(arguments):
         num_subnetworks,
         subnetwork_architecture,
         show_every,
-        use_feature_extractor,
-        feature_extractor_arch,
-        code_dim,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -50,9 +47,6 @@ def main(arguments):
         arguments.num_learners,
         arguments.learner_architecture,
         arguments.show_every,
-        arguments.use_feature_extractor,
-        arguments.feature_extractor_arch,
-        arguments.code_dim,
     )
 
     results = dict()
@@ -171,29 +165,6 @@ def parse_args():
         default=1,
         help="the number of interval between training progress displays, default: [1]",
     )
-    group.add_argument(
-        "-x",
-        "--use_feature_extractor",
-        required=False,
-        dest="use_feature_extractor",
-        action="store_true",
-    )
-    group.add_argument(
-        "--feature_extractor_arch",
-        required=False,
-        default="dnn",
-        type=str,
-        help="the architecture to use for feature extractor, options: [cnn | dnn (default) | resnet18]",
-    )
-    group.add_argument(
-        "-c",
-        "--code_dim",
-        required=False,
-        type=int,
-        default=70,
-        help="the dimensionality of the learned representation, default: [70]",
-    )
-    group.set_defaults(use_feature_extractor=False)
     arguments = parser.parse_args()
     return arguments
 
