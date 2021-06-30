@@ -206,3 +206,17 @@ class Model(torch.nn.Module):
         filename = os.path.join(model_path, filename)
         torch.save(self.state_dict(), filename)
         print(f"[SUCCESS] Trained model exported to {filename}")
+
+    def load_model(self, filename: str) -> None:
+        print("[INFO] Loading the trained model...")
+        model_name = filename.split("-", 6)[2]
+        dataset_name = filename.split("-", 6)[5]
+        model_path = os.path.join("outputs", "models", model_name, dataset_name)
+        if not filename.endswith(".pth"):
+            filename = f"{filename}.pth"
+        filename = os.path.join(model_path, filename)
+        if os.path.isfile(filename):
+            self.load_state_dict(torch.load(filename))
+            print("[SUCCESS] Trained model ready for use.")
+        else:
+            print("[ERROR] Trained model not found.")
