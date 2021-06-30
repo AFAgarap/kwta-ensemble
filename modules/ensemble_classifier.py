@@ -56,7 +56,7 @@ def main(arguments):
         for seed in seeds:
             print()
             print(f"[INFO] Dataset: {dataset}")
-            print(f"[INFO] Number of learners: {num_learner}")
+            print(f"[INFO] Number of learners: {num_subnetwork}")
             print(f"[INFO] Seed: {seed}")
 
             set_global_seed(seed=seed)
@@ -101,6 +101,13 @@ def main(arguments):
                 weight_decay=weight_decay,
             )
             model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
+            accuracy = model.score(test_loader)
+            accuracies.append(accuracy)
+            results[f"acc_seed_{seed}"] = accuracy
+            results[f"training_loss_{seed}"] = model.train_loss
+            results[f"training_acc_{seed}"] = model.train_accuracy
+            results[f"valid_loss_{seed}"] = model.valid_loss
+            results[f"valid_acc_{seed}"] = model.valid_accuracy
 
 
 def parse_args():
