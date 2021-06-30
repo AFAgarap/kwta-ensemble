@@ -113,3 +113,17 @@ def create_dataloaders(
         "test": test_loader,
     }
     return data_loaders
+
+
+def get_ensemble_filename(
+    num_subnetwork: int,
+    subnetwork_architecture: str,
+    dataset: str,
+    learning_rate: float,
+    optimizer: str,
+    batch_size: int,
+) -> str:
+    filename = f"ensemble-{num_subnetwork}-{subnetwork_architecture}"
+    filename = f"{filename}-{dataset}"
+    filename = f"{filename}-{learning_rate}-lr-opt-{optimizer}-{batch_size}-bsize"
+    return filename
