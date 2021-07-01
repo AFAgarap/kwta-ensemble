@@ -132,6 +132,20 @@ def get_ensemble_filename(
 
 
 def export_results(model_results: Dict, filename: str) -> None:
+    """
+    Exports the training results stored in model class to a JSON file.
+
+    Parameters
+    ----------
+    model: torch.nn.Module
+        The trained model object.
+    accuracy: Dict
+        The dictionary that consists of the
+        model accuracy per seed, and the
+        average, max, and std accuracy over all seeds.
+    filename: str
+        The filename of the JSON file to write.
+    """
     dataset_name = filename.split("-")[3]
     results_path = os.path.join("outputs", "results", dataset_name)
     if not os.path.exists(results_path):
