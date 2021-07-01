@@ -218,8 +218,8 @@ class Model(torch.nn.Module):
 
     def load_model(self, filename: str) -> None:
         print("[INFO] Loading the trained model...")
-        model_name = filename.split("-", 6)[2]
-        dataset_name = filename.split("-", 6)[5]
+        model_name = filename.split("-")[0]
+        dataset_name = filename.split("-")[3]
         model_path = os.path.join("outputs", "models", model_name, dataset_name)
         if not filename.endswith(".pth"):
             filename = f"{filename}.pth"
