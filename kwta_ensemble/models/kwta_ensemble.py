@@ -29,7 +29,7 @@ class kWTAEnsemble(Model):
         self,
         num_classes: int,
         expert_model: torch.nn.Module,
-        num_experts: int = 2,
+        num_subnetworks: int = 2,
         sparsity: float = 0.75,
         competition_delay: int = 3,
         optimizer: str = "sgd",
@@ -39,16 +39,21 @@ class kWTAEnsemble(Model):
             "cuda:0" if torch.cuda.is_available() else "cpu"
         ),
     ):
-        super().__init__()
-        self.num_experts = num_experts
+        super().__init__(
+            num_subnetworks=num_subnetworks,
+            optimizer=optimizer,
+            learning_rate=learning_rate,
+            weight_decay=weight_decay,
+        )
+        self.num_subnetworks = num_subnetworks
         self.experts = torch.nn.Sequential()
-        for index in range(num_experts):
+        for index in range(self.num_subnetworks):
             expert_model = deepcopy(expert_model)
             expert_model.apply(self.reset_parameters)
             self.experts.add_module(f"expert_{index}", expert_model)
         self.competitive_layer = torch.nn.Sequential(
             torch.nn.Linear(
-                in_features=(num_classes * num_experts), out_features=num_classes
+                in_features=(num_classes * num_subnetworks), out_features=num_classes
             ),
             WinnersTakeAllLayer(sparsity=sparsity),
         )
@@ -56,7 +61,7 @@ class kWTAEnsemble(Model):
 
     def forward(self, features: torch.Tensor, epoch: int = 0) -> torch.Tensor:
         outputs = []
-        for index in range(self.num_experts):
+        for index in range(self.num_subnetworks):
             output = self.experts[index](features)
             outputs.append(output)
         outputs = torch.cat(outputs, dim=1)

@@ -24,7 +24,7 @@ class Ensemble(torch.nn.Module):
     def __init__(
         self,
         network: torch.nn.Module,
-        num_learners: int = 3,
+        num_subnetworks: int = 3,
         optimizer: str = "sgd",
         learning_rate: float = 1e-3,
         weight_decay: float = 1e-5,
@@ -39,7 +39,7 @@ class Ensemble(torch.nn.Module):
         ----------
         network: torch.nn.Module:
             The learner architecture to use in ensemble.
-        num_learners: int
+        num_subnetworks: int
             The number of networks to use in ensemble.
         optimizer: str
             The optimizer to use.
@@ -51,10 +51,13 @@ class Ensemble(torch.nn.Module):
             The device to use for computation.
         """
         super().__init__(
-            optimizer=optimizer, learning_rate=learning_rate, weight_decay=weight_decay
+            num_subnetworks=num_subnetworks,
+            optimizer=optimizer,
+            learning_rate=learning_rate,
+            weight_decay=weight_decay,
         )
         self.model = torch.nn.Sequential()
-        for index in range(num_learners):
+        for index in range(self.num_subnetworks):
             network = deepcopy(network)
             network.apply(self.reset_parameters)
             self.model.add_module(f"network_{index}", network)

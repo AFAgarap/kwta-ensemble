@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Implementation of model super class"""
 from copy import deepcopy
+import os
 import time
 from typing import Dict, Tuple
 
@@ -29,6 +30,7 @@ class Model(torch.nn.Module):
 
     def __init__(
         self,
+        num_subnetworks: int,
         optimizer: str,
         learning_rate: float,
         weight_decay: float = 1e-5,
@@ -75,6 +77,7 @@ class Model(torch.nn.Module):
             self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
                 self.optimizer, patience=1, verbose=True, min_lr=1e-4, factor=1e-2
             )
+        self.num_subnetworks = num_subnetworks
         self.device = device
         self.to(self.device)
         self.train_loss = []
@@ -191,3 +194,38 @@ class Model(torch.nn.Module):
         print()
 
         self.load_state_dict(best_model_weights)
+
+    def save_model(self, filename: str) -> None:
+        """
+        Exports the trained model to
+        outputs/models directory.
+
+        Parameter
+        ---------
+        filename: str
+            The filename for the exported model.
+        """
+        print("[INFO] Exporting trained model...")
+        model_name = filename.split("-")[0]
+        dataset_name = filename.split("-")[3]
+        model_path = os.path.join("outputs", "models", model_name, dataset_name)
+        if not os.path.exists(model_path):
+            os.makedirs(model_path)
+        filename = f"{filename}.pth"
+        filename = os.path.join(model_path, filename)
+        torch.save(self.state_dict(), filename)
+        print(f"[SUCCESS] Trained model exported to {filename}")
+
+    def load_model(self, filename: str) -> None:
+        print("[INFO] Loading the trained model...")
+        model_name = filename.split("-")[0]
+        dataset_name = filename.split("-")[3]
+        model_path = os.path.join("outputs", "models", model_name, dataset_name)
+        if not filename.endswith(".pth"):
+            filename = f"{filename}.pth"
+        filename = os.path.join(model_path, filename)
+        if os.path.isfile(filename):
+            self.load_state_dict(torch.load(filename))
+            print("[SUCCESS] Trained model ready for use.")
+        else:
+            print("[ERROR] Trained model not found.")
