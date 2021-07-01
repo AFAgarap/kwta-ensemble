@@ -129,5 +129,5 @@ def get_ensemble_filename(
     return filename
 
 
-def export_results():
+def export_results(model_results: Dict, filename: str) -> None:
     pass
