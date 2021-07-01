@@ -18,7 +18,11 @@
 import argparse
 
 from kwta_ensemble.models import CNN, DNN, Ensemble, LeNet
-from kwta_ensemble.utils import create_dataloaders, set_global_seed
+from kwta_ensemble.utils import (
+    create_dataloaders,
+    get_ensemble_filename,
+    set_global_seed,
+)
 
 
 def main(arguments):
@@ -108,6 +112,17 @@ def main(arguments):
             results[f"training_acc_{seed}"] = model.train_accuracy
             results[f"valid_loss_{seed}"] = model.valid_loss
             results[f"valid_acc_{seed}"] = model.valid_accuracy
+
+            print(f"Test acc: {accuracy:.4f}")
+            filename = get_ensemble_filename(
+                num_subnetwork=num_subnetwork,
+                subnetwork_architecture=subnetwork_architecture,
+                dataset=dataset,
+                learning_rate=learning_rate,
+                optimizer=optimizer,
+                batch_size=batch_size,
+            )
+            model.save_model(filename=f"{seed}-seed-{filename}")
 
 
 def parse_args():
