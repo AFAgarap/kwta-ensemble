@@ -15,7 +15,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Utility functions module"""
+import json
 from math import ceil, floor
+import os
 from typing import Dict, Tuple
 
 import random
@@ -130,4 +132,14 @@ def get_ensemble_filename(
 
 
 def export_results(model_results: Dict, filename: str) -> None:
-    pass
+    dataset_name = filename.split("-")[3]
+    results_path = os.path.join("outputs", "results", dataset_name)
+    if not os.path.exists(results_path):
+        os.makedirs(results_path)
+    filename = f"{filename}.json"
+    filename = os.path.join(results_path, filename)
+    results = dict()
+    for key, value in model_results.items():
+        results[key] = value
+    with open(filename, "w") as file:
+        json.dump(results, file)
