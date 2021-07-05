@@ -84,6 +84,19 @@ class Model(torch.nn.Module):
             modules.reset_parameters()
 
     def predict(self, features: torch.Tensor) -> torch.Tensor:
+        """
+        Computes the model outputs.
+
+        Parameter
+        ---------
+        features: torch.Tensor
+            The input features.
+
+        Returns
+        -------
+        outputs: torch.Tensor
+            The model outputs.
+        """
         outputs = self(features)
         return outputs
 
