@@ -52,17 +52,35 @@ class Ensemble(Model):
         device: torch.device
             The device to use for computation.
         """
-        super().__init__(
-            num_subnetworks=num_subnetworks,
-            optimizer=optimizer,
-            learning_rate=learning_rate,
-            weight_decay=weight_decay,
-        )
+        super().__init__(num_subnetworks=num_subnetworks)
         self.model = torch.nn.Sequential()
         for index in range(self.num_subnetworks):
             network = deepcopy(network)
             network.apply(self.reset_parameters)
             self.model.add_module(f"network_{index}", network)
+        if optimizer == "sgd":
+            self.optimizer = torch.optim.SGD(
+                params=filter(
+                    lambda parameters: parameters.requires_grad, self.parameters()
+                ),
+                lr=learning_rate,
+                momentum=9e-1,
+                weight_decay=weight_decay,
+            )
+            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                self.optimizer, patience=2, verbose=True, min_lr=1e-4, factor=1e-1
+            )
+        elif optimizer == "adamw":
+            self.optimizer = torch.optim.AdamW(
+                params=filter(
+                    lambda parameters: parameters.requires_grad, self.parameters()
+                ),
+                lr=learning_rate,
+                weight_decay=weight_decay,
+            )
+            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                self.optimizer, patience=1, verbose=True, min_lr=1e-4, factor=1e-2
+            )
         self.device = device
         self.to(self.device)
 
