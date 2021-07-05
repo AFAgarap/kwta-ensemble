@@ -83,6 +83,10 @@ class Model(torch.nn.Module):
         if isinstance(modules, torch.nn.Linear) or isinstance(modules, torch.nn.Conv2d):
             modules.reset_parameters()
 
+    def predict(self, features: torch.Tensor) -> torch.Tensor:
+        outputs = self(features)
+        return outputs
+
     def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
         """
         Performs single epoch training for model.
