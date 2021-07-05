@@ -197,6 +197,20 @@ class Model(torch.nn.Module):
 
         self.load_state_dict(best_model_weights)
 
+    def score(self, data_loader: torch.utils.data.DataLoader) -> float:
+        self.eval()
+        self.device = torch.device("cpu")
+        self.to(self.device)
+        with torch.no_grad():
+            for features, labels in data_loader:
+                features = features.to(self.device)
+                labels = labels.to(self.device)
+                outputs = self.predict(features)
+                correct = (outputs.argmax(1) == labels).sum().item()
+                accuracy = correct / len(labels)
+        accuracy *= 100.0
+        return accuracy
+
     def save_model(self, filename: str) -> None:
         """
         Exports the trained model to
