@@ -31,9 +31,6 @@ class Model(torch.nn.Module):
     def __init__(
         self,
         num_subnetworks: int,
-        optimizer: str,
-        learning_rate: float,
-        weight_decay: float = 1e-5,
         device: torch.device = torch.device(
             "cuda:0" if torch.cuda.is_available else "cpu"
         ),
