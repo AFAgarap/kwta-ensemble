@@ -100,7 +100,7 @@ def main(arguments):
 
             model = Ensemble(
                 network=subnetwork,
-                num_learners=num_subnetwork,
+                num_subnetworks=num_subnetwork,
                 optimizer=optimizer,
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
