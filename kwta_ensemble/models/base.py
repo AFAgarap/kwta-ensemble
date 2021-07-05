@@ -95,6 +95,14 @@ class Model(torch.nn.Module):
         phase: str
             The phase of training,
             whether training or validation.
+
+        Returns
+        -------
+        Tuple[float, float]
+            epoch_loss
+                The training or validation epoch loss.
+            epoch_accuracy
+                The training or validation epoch accuracy.
         """
         epoch_loss = 0.0
         epoch_accuracy = 0.0
