@@ -52,7 +52,7 @@ def main(arguments):
         arguments.learning_rate,
         arguments.weight_decay,
         arguments.epochs,
-        arguments.num_subnetwork,
+        arguments.num_subnetworks,
         arguments.subnetwork_architecture,
         arguments.show_every,
     )
