@@ -52,8 +52,8 @@ def main(arguments):
         arguments.learning_rate,
         arguments.weight_decay,
         arguments.epochs,
-        arguments.num_learners,
-        arguments.learner_architecture,
+        arguments.num_subnetwork,
+        arguments.subnetwork_architecture,
         arguments.show_every,
     )
 
