@@ -99,8 +99,6 @@ def main(arguments):
                 )
 
             model = Ensemble(
-                num_features=num_features,
-                input_shape=input_shape,
                 network=subnetwork,
                 num_learners=num_subnetwork,
                 optimizer=optimizer,
