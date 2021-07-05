@@ -198,6 +198,19 @@ class Model(torch.nn.Module):
         self.load_state_dict(best_model_weights)
 
     def score(self, data_loader: torch.utils.data.DataLoader) -> float:
+        """
+        Computes the accuracy of the model.
+
+        Parameter
+        ---------
+        data_loader: torch.utils.data.DataLoader
+            The data loader to use in evaluating the model.
+
+        Returns
+        -------
+        accuracy: float
+            The model accuracy.
+        """
         self.eval()
         self.device = torch.device("cpu")
         self.to(self.device)
