@@ -19,8 +19,10 @@ from copy import deepcopy
 
 import torch
 
+from kwta_ensemble.models.base import Model
 
-class Ensemble(torch.nn.Module):
+
+class Ensemble(Model):
     def __init__(
         self,
         network: torch.nn.Module,
