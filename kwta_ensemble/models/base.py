@@ -244,7 +244,7 @@ class Model(torch.nn.Module):
     def save_model(self, filename: str) -> None:
         """
         Exports the trained model to
-        outputs/models directory.
+        `outputs/models` directory.
 
         Parameter
         ---------
@@ -263,6 +263,15 @@ class Model(torch.nn.Module):
         print(f"[SUCCESS] Trained model exported to {filename}")
 
     def load_model(self, filename: str) -> None:
+        """
+        Loads the trained model from
+        `outputs/models` directory.
+
+        Parameter
+        ---------
+        filename: str
+            The filename for the exported model to load.
+        """
         print("[INFO] Loading the trained model...")
         model_name = filename.split("-")[0]
         dataset_name = filename.split("-")[3]
