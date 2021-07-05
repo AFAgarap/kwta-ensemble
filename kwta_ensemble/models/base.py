@@ -59,17 +59,6 @@ class Model(torch.nn.Module):
         self.valid_loss = []
         self.valid_accuracy = []
 
-    def forward(self, features: torch.Tensor) -> torch.Tensor:
-        """
-        The forward pass by the model.
-
-        Parameter
-        ---------
-        features: torch.Tensor
-            The input features.
-        """
-        raise NotImplementedError
-
     def reset_parameters(self, modules: torch.nn.Module) -> None:
         """
         Performs parameter reset to avoid
@@ -82,6 +71,17 @@ class Model(torch.nn.Module):
         """
         if isinstance(modules, torch.nn.Linear) or isinstance(modules, torch.nn.Conv2d):
             modules.reset_parameters()
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        """
+        The forward pass by the model.
+
+        Parameter
+        ---------
+        features: torch.Tensor
+            The input features.
+        """
+        raise NotImplementedError
 
     def predict(self, features: torch.Tensor) -> torch.Tensor:
         """
