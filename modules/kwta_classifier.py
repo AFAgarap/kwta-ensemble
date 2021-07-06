@@ -94,6 +94,17 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                 )
 
+            model = kWTAEnsemble(
+                num_classes=num_classes,
+                expert_model=subnetwork,
+                num_subnetworks=num_subnetwork,
+                sparsity=sparsity_factor,
+                competition_delay=competition_delay,
+                optimizer=optimizer,
+                learning_rate=learning_rate,
+                weight_decay=weight_decay,
+            )
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
