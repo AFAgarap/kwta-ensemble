@@ -206,6 +206,13 @@ def parse_args():
         help="the number of epochs to train the model, default: [10]",
     )
     group.add_argument(
+        "-se",
+        "--show_every",
+        type=int,
+        default=1,
+        help="the number of interval between training progress displays, default: [1]",
+    )
+    group.add_argument(
         "-nl",
         "--num_subnetworks",
         type=int,
@@ -217,13 +224,6 @@ def parse_args():
         type=str,
         default="dnn",
         help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
-    )
-    group.add_argument(
-        "-se",
-        "--show_every",
-        type=int,
-        default=1,
-        help="the number of interval between training progress displays, default: [1]",
     )
     arguments = parser.parse_args()
     return arguments
