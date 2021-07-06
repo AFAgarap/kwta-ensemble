@@ -18,7 +18,11 @@
 import argparse
 
 from kwta_ensemble.models import CNN, DNN, kWTAEnsemble, LeNet
-from kwta_ensemble.utils import create_dataloaders, set_global_seed
+from kwta_ensemble.utils import (
+    create_dataloaders,
+    get_kwta_enn_filename,
+    set_global_seed,
+)
 
 
 def main(arguments: argparse.Namespace):
@@ -112,6 +116,19 @@ def main(arguments: argparse.Namespace):
             results[f"training_acc_{seed}"] = model.train_accuracy
             results[f"valid_loss_{seed}"] = model.valid_loss
             results[f"valid_acc_{seed}"] = model.valid_accuracy
+
+            print(f"Test acc: {accuracy:.4f}")
+            filename = get_kwta_enn_filename(
+                num_subnetwork=num_subnetwork,
+                subnetwork_architecture=subnetwork_architecture,
+                dataset=dataset,
+                learning_rate=learning_rate,
+                optimizer=optimizer,
+                batch_size=batch_size,
+                competition_delay=competition_delay,
+                sparsity_factor=sparsity_factor,
+            )
+            model.save_model(filename=f"{seed}-seed-{filename}")
 
 
 def parse_args():
