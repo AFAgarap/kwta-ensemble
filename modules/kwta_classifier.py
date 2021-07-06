@@ -17,9 +17,12 @@
 """kWTA Ensemble classifier"""
 import argparse
 
+import numpy as np
+
 from kwta_ensemble.models import CNN, DNN, kWTAEnsemble, LeNet
 from kwta_ensemble.utils import (
     create_dataloaders,
+    export_results,
     get_kwta_enn_filename,
     set_global_seed,
 )
@@ -129,6 +132,16 @@ def main(arguments: argparse.Namespace):
                 sparsity_factor=sparsity_factor,
             )
             model.save_model(filename=f"{seed}-seed-{filename}")
+        print()
+        print("=" * 40)
+        print(f"AVG ACC = {np.mean(accuracies):.4f}")
+        print(f"MAX ACC = {np.max(accuracies):.4f}")
+        print(f"STDDEV ACC = {np.std(accuracies):.4f}")
+        print("=" * 40)
+        results["acc_avg"] = np.mean(accuracies)
+        results["acc_max"] = np.max(accuracies)
+        results["acc_std"] = np.std(accuracies)
+        export_results(model_results=results, filename=filename)
 
 
 def parse_args():
