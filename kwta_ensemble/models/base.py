@@ -40,12 +40,9 @@ class Model(torch.nn.Module):
 
         Parameters
         ----------
-        optimizer: str
-            The optimization algorithm to use.
-        learning_rate: float
-            The learning rate to use for optimization.
-        weight_decay: float
-            The weight decay to use for regularization.
+        num_subnetworks: int
+            The number of sub-networks to
+            instantiate in the ensemble.
         device: torch.device
             The device to use for computations.
         """
