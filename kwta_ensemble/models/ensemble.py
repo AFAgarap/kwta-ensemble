@@ -81,7 +81,6 @@ class Ensemble(Model):
             self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
                 self.optimizer, patience=1, verbose=True, min_lr=1e-4, factor=1e-2
             )
-        self.device = device
         self.to(self.device)
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
