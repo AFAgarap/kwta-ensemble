@@ -17,6 +17,8 @@
 """kWTA Ensemble classifier"""
 import argparse
 
+from kwta_ensemble.utils import create_dataloaders, set_global_seed
+
 
 def main(arguments: argparse.Namespace):
     (
@@ -50,6 +52,31 @@ def main(arguments: argparse.Namespace):
         arguments.use_competition_after,
         arguments.sparsity_factor,
     )
+    results = dict()
+    for num_subnetwork in range(2, num_subnetworks + 1):
+        accuracies = []
+        for seed in seeds:
+            print()
+            print(f"[INFO] Dataset: {dataset}")
+            print(f"[INFO] Number of learners: {num_subnetwork}")
+            print(f"[INFO] Seed: {seed}")
+
+            set_global_seed(seed=seed)
+
+            data_loaders = create_dataloaders(
+                dataset=dataset,
+                vectorizer=vectorizer,
+                ngram_range=ngram_range,
+                batch_size=batch_size,
+                seed=seed,
+            )
+
+            train_loader = data_loaders.get("train")
+            valid_loader = data_loaders.get("valid")
+            test_loader = data_loaders.get("test")
+            num_features = data_loaders.get("meta").get("num_features")
+            input_shape = data_loaders.get("meta").get("input_shape")
+            num_classes = data_loaders.get("meta").get("num_classes")
 
 
 def parse_args():
