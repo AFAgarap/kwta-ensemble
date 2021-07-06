@@ -113,6 +113,20 @@ def parse_args():
         default="dnn",
         help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
     )
+    group.add_argument(
+        "-cd",
+        "--use_competition_after",
+        type=int,
+        default=0,
+        help="the number of epochs to reach before using kWTA, default: [0]",
+    )
+    group.add_argument(
+        "-sf",
+        "--sparsity_factor",
+        type=float,
+        default=0.75,
+        help="the percentage of winners to get, default: [0.75]",
+    )
     arguments = parser.parse_args()
     return arguments
 
