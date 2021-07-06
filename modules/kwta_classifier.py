@@ -104,8 +104,14 @@ def main(arguments: argparse.Namespace):
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
             )
-            model.fit(train_loader, valid_loader, epochs=epochs,
-                      show_every=show_every)
+            model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
+            accuracy = model.score(test_loader)
+            accuracies.append(accuracy)
+            results[f"acc_seed_{seed}"] = accuracy
+            results[f"training_loss_{seed}"] = model.train_loss
+            results[f"training_acc_{seed}"] = model.train_accuracy
+            results[f"valid_loss_{seed}"] = model.valid_loss
+            results[f"valid_acc_{seed}"] = model.valid_accuracy
 
 
 def parse_args():
