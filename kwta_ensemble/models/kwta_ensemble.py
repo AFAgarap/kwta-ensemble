@@ -39,12 +39,7 @@ class kWTAEnsemble(Model):
             "cuda:0" if torch.cuda.is_available() else "cpu"
         ),
     ):
-        super().__init__(
-            num_subnetworks=num_subnetworks,
-            optimizer=optimizer,
-            learning_rate=learning_rate,
-            weight_decay=weight_decay,
-        )
+        super().__init__(num_subnetworks=num_subnetworks)
         self.num_subnetworks = num_subnetworks
         self.experts = torch.nn.Sequential()
         for index in range(self.num_subnetworks):
