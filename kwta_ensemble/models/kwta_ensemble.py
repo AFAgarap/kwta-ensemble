@@ -51,6 +51,7 @@ class kWTAEnsemble(Model):
             expert_model = deepcopy(expert_model)
             expert_model.apply(self.reset_parameters)
             self.experts.add_module(f"expert_{index}", expert_model)
+
         self.competitive_layer = torch.nn.Sequential(
             torch.nn.Linear(
                 in_features=(num_classes * num_subnetworks), out_features=num_classes
@@ -58,6 +59,9 @@ class kWTAEnsemble(Model):
             WinnersTakeAllLayer(sparsity=sparsity),
         )
         self.competition_delay = competition_delay
+
+        self.to(self.device)
+
         if optimizer == "sgd":
             self.optimizer = torch.optim.SGD(
                 params=filter(
