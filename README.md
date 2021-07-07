@@ -24,3 +24,20 @@ layer having 100 neurons as the sub-network architecture. Our approach
 yielded a better performance than our baseline models, reaching the
 following test accuracies on benchmark datasets: 98.34% on MNIST, 88.06% on
 Fashion-MNIST, 91.61% on KMNIST, and 95.97% on WDBC.
+
+## Usage
+
+It is recommended to create a virtual environment for this repository.
+
+```buildoutcfg
+$ pyenv virtualenv 3.8.8 kwta-ensemble
+$ pyenv local kwta-ensemble
+```
+
+Then, either `pip` or `poetry` could be used to set up its dependencies.
+
+```
+$ pip install -r requirements
+$ # or
+$ poetry install
+```
