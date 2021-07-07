@@ -1,1 +1,1 @@
-# Winner-Take-All Ensemble Neural Network
+# k-Winners-Take-All Ensemble Neural Network
