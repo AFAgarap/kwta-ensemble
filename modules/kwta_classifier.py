@@ -14,21 +14,21 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""Ensemble classifier"""
+"""kWTA Ensemble classifier"""
 import argparse
 
 import numpy as np
 
-from kwta_ensemble.models import CNN, DNN, Ensemble, LeNet
+from kwta_ensemble.models import CNN, DNN, kWTAEnsemble, LeNet
 from kwta_ensemble.utils import (
     create_dataloaders,
     export_results,
-    get_ensemble_filename,
+    get_kwta_enn_filename,
     set_global_seed,
 )
 
 
-def main(arguments):
+def main(arguments: argparse.Namespace):
     (
         seeds,
         dataset,
@@ -42,6 +42,8 @@ def main(arguments):
         num_subnetworks,
         subnetwork_architecture,
         show_every,
+        competition_delay,
+        sparsity_factor,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -55,8 +57,9 @@ def main(arguments):
         arguments.num_subnetworks,
         arguments.subnetwork_architecture,
         arguments.show_every,
+        arguments.use_competition_after,
+        arguments.sparsity_factor,
     )
-
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
         accuracies = []
@@ -98,9 +101,12 @@ def main(arguments):
                     num_classes=num_classes,
                 )
 
-            model = Ensemble(
-                network=subnetwork,
+            model = kWTAEnsemble(
+                num_classes=num_classes,
+                expert_model=subnetwork,
                 num_subnetworks=num_subnetwork,
+                sparsity=sparsity_factor,
+                competition_delay=competition_delay,
                 optimizer=optimizer,
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
@@ -115,13 +121,15 @@ def main(arguments):
             results[f"valid_acc_{seed}"] = model.valid_accuracy
 
             print(f"Test acc: {accuracy:.4f}")
-            filename = get_ensemble_filename(
+            filename = get_kwta_enn_filename(
                 num_subnetwork=num_subnetwork,
                 subnetwork_architecture=subnetwork_architecture,
                 dataset=dataset,
                 learning_rate=learning_rate,
                 optimizer=optimizer,
                 batch_size=batch_size,
+                competition_delay=competition_delay,
+                sparsity_factor=sparsity_factor,
             )
             model.save_model(filename=f"{seed}-seed-{filename}")
         print()
@@ -137,7 +145,9 @@ def main(arguments):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Ensemble Neural Network classifier")
+    parser = argparse.ArgumentParser(
+        description="kWTA Ensemble Neural Network classifier"
+    )
     group = parser.add_argument_group("Parameters")
     group.add_argument(
         "-s",
@@ -224,6 +234,20 @@ def parse_args():
         type=str,
         default="dnn",
         help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
+    )
+    group.add_argument(
+        "-cd",
+        "--use_competition_after",
+        type=int,
+        default=0,
+        help="the number of epochs to reach before using kWTA, default: [0]",
+    )
+    group.add_argument(
+        "-sf",
+        "--sparsity_factor",
+        type=float,
+        default=0.75,
+        help="the percentage of winners to get, default: [0.75]",
     )
     arguments = parser.parse_args()
     return arguments

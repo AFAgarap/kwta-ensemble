@@ -39,18 +39,14 @@ class kWTAEnsemble(Model):
             "cuda:0" if torch.cuda.is_available() else "cpu"
         ),
     ):
-        super().__init__(
-            num_subnetworks=num_subnetworks,
-            optimizer=optimizer,
-            learning_rate=learning_rate,
-            weight_decay=weight_decay,
-        )
+        super().__init__(num_subnetworks=num_subnetworks)
         self.num_subnetworks = num_subnetworks
         self.experts = torch.nn.Sequential()
         for index in range(self.num_subnetworks):
             expert_model = deepcopy(expert_model)
             expert_model.apply(self.reset_parameters)
             self.experts.add_module(f"expert_{index}", expert_model)
+
         self.competitive_layer = torch.nn.Sequential(
             torch.nn.Linear(
                 in_features=(num_classes * num_subnetworks), out_features=num_classes
@@ -58,6 +54,32 @@ class kWTAEnsemble(Model):
             WinnersTakeAllLayer(sparsity=sparsity),
         )
         self.competition_delay = competition_delay
+
+        self.to(self.device)
+
+        if optimizer == "sgd":
+            self.optimizer = torch.optim.SGD(
+                params=filter(
+                    lambda parameters: parameters.requires_grad, self.parameters()
+                ),
+                lr=learning_rate,
+                momentum=9e-1,
+                weight_decay=weight_decay,
+            )
+            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                self.optimizer, patience=2, verbose=True, min_lr=1e-4, factor=1e-1
+            )
+        elif optimizer == "adamw":
+            self.optimizer = torch.optim.AdamW(
+                params=filter(
+                    lambda parameters: parameters.requires_grad, self.parameters()
+                ),
+                lr=learning_rate,
+                weight_decay=weight_decay,
+            )
+            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                self.optimizer, patience=1, verbose=True, min_lr=1e-4, factor=1e-2
+            )
 
     def forward(self, features: torch.Tensor, epoch: int = 0) -> torch.Tensor:
         outputs = []
@@ -76,25 +98,25 @@ class kWTAEnsemble(Model):
         outputs = activations.get(len(activations) - 1)
         return outputs
 
-    def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
-        epoch_loss = 0.0
-        epoch_accuracy = 0.0
-        for features, labels in data_loaders.get(phase):
-            features = features.to(self.device)
-            labels = labels.to(self.device)
+    # def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
+    #     epoch_loss = 0.0
+    #     epoch_accuracy = 0.0
+    #     for features, labels in data_loaders.get(phase):
+    #         features = features.to(self.device)
+    #         labels = labels.to(self.device)
 
-            self.optimizer.zero_grad()
+    #         self.optimizer.zero_grad()
 
-            with torch.set_grad_enabled(phase == "train"):
-                outputs = self(features)
-                loss = self.criterion(outputs, labels)
+    #         with torch.set_grad_enabled(phase == "train"):
+    #             outputs = self(features)
+    #             loss = self.criterion(outputs, labels)
 
-                if phase == "train":
-                    loss.backward()
-                    self.optimizer.step()
+    #             if phase == "train":
+    #                 loss.backward()
+    #                 self.optimizer.step()
 
-            epoch_loss += loss.item()
-            epoch_accuracy += (outputs.argmax(1) == labels).sum().item() / len(labels)
-        epoch_loss /= len(data_loaders.get(phase))
-        epoch_accuracy /= len(data_loaders.get(phase))
-        return epoch_loss, epoch_accuracy
+    #         epoch_loss += loss.item()
+    #         epoch_accuracy += (outputs.argmax(1) == labels).sum().item() / len(labels)
+    #     epoch_loss /= len(data_loaders.get(phase))
+    #     epoch_accuracy /= len(data_loaders.get(phase))
+    #     return epoch_loss, epoch_accuracy

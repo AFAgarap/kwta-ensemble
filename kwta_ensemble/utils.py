@@ -131,6 +131,23 @@ def get_ensemble_filename(
     return filename
 
 
+def get_kwta_enn_filename(
+    num_subnetwork: int,
+    subnetwork_architecture: str,
+    dataset: str,
+    learning_rate: float,
+    optimizer: str,
+    batch_size: int,
+    competition_delay: int,
+    sparsity_factor: float,
+) -> str:
+    filename = f"ensemble-{num_subnetwork}-{subnetwork_architecture}"
+    filename = f"{filename}-{dataset}"
+    filename = f"{filename}-cd-{competition_delay}-s-{sparsity_factor}"
+    filename = f"{filename}-{learning_rate}-lr-opt-{optimizer}-{batch_size}-bsize"
+    return filename
+
+
 def export_results(model_results: Dict, filename: str) -> None:
     """
     Exports the training results stored in model class to a JSON file.
