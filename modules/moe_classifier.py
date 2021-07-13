@@ -23,7 +23,33 @@ from kwta_ensemble.models import DNN
 
 
 def main(arguments: argparse.Namespace):
-    pass
+    (
+        seeds,
+        dataset,
+        vectorizer,
+        ngram_range,
+        batch_size,
+        optimizer,
+        learning_rate,
+        weight_decay,
+        epochs,
+        show_every,
+        num_subnetworks,
+        subnetwork_architecture,
+    ) = (
+        arguments.seeds,
+        arguments.dataset,
+        arguments.vectorizer,
+        arguments.ngram_range,
+        arguments.batch_size,
+        arguments.optimizer,
+        arguments.learning_rate,
+        arguments.weight_decay,
+        arguments.epochs,
+        arguments.show_every,
+        arguments.num_subnetworks,
+        arguments.subnetwork_architecture,
+    )
 
 
 def parse_args():
