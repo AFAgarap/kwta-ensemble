@@ -50,6 +50,12 @@ def main(arguments: argparse.Namespace):
         arguments.num_subnetworks,
         arguments.subnetwork_architecture,
     )
+    for num_subnetwork in range(2, num_subnetworks + 1):
+        for seed in seeds:
+            print()
+            print(f"[INFO] Dataset: {dataset}")
+            print(f"[INFO] Number of learners: {num_subnetwork}")
+            print(f"[INFO] Seed: {seed}")
 
 
 def parse_args():
