@@ -18,9 +18,15 @@
 import argparse
 
 from moe.models import MoE
+import numpy as np
 
 from kwta_ensemble.models import CNN, DNN, LeNet
-from kwta_ensemble.utils import create_dataloaders, set_global_seed
+from kwta_ensemble.utils import (
+    create_dataloaders,
+    export_results,
+    get_moe_filename,
+    set_global_seed,
+)
 
 
 def main(arguments: argparse.Namespace):
@@ -124,6 +130,25 @@ def main(arguments: argparse.Namespace):
             results[f"valid_acc_{seed}"] = model.valid_accuracy
 
             print(f"Test acc: {accuracy:.4f}")
+            filename = get_moe_filename(
+                num_subnetwork=num_subnetwork,
+                expert_gating_architecture=subnetwork_architecture,
+                dataset=dataset,
+                learning_rate=learning_rate,
+                optimizer=optimizer,
+                batch_size=batch_size,
+            )
+            model.save_model(filename=f"{seed}-seed-{filename}")
+        print()
+        print("=" * 40)
+        print(f"AVG ACC = {np.mean(accuracies):.4f}")
+        print(f"MAX ACC = {np.max(accuracies):.4f}")
+        print(f"STDDEV ACC = {np.std(accuracies):.4f}")
+        print("=" * 40)
+        results["acc_avg"] = np.mean(accuracies)
+        results["acc_max"] = np.max(accuracies)
+        results["acc_std"] = np.std(accuracies)
+        export_results(model_results=results, filename=filename)
 
 
 def parse_args():
