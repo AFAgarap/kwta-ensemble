@@ -51,7 +51,10 @@ def main(arguments: argparse.Namespace):
         arguments.num_subnetworks,
         arguments.subnetwork_architecture,
     )
+
+    results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
+        accuracies = list()
         for seed in seeds:
             print()
             print(f"[INFO] Dataset: {dataset}")
