@@ -71,6 +71,13 @@ def main(arguments: argparse.Namespace):
                 seed=seed,
             )
 
+            train_loader = data_loaders.get("train")
+            valid_loader = data_loaders.get("valid")
+            test_loader = data_loaders.get("test")
+            num_features = data_loaders.get("meta").get("num_features")
+            input_shape = data_loaders.get("meta").get("input_shape")
+            num_classes = data_loaders.get("meta").get("num_classes")
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="MoE classifier")
