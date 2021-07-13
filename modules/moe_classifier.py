@@ -19,7 +19,7 @@ import argparse
 
 from moe.models import MoE
 
-from kwta_ensemble.models import DNN
+from kwta_ensemble.models import CNN, DNN, LeNet
 from kwta_ensemble.utils import create_dataloaders, set_global_seed
 
 
@@ -77,6 +77,21 @@ def main(arguments: argparse.Namespace):
             num_features = data_loaders.get("meta").get("num_features")
             input_shape = data_loaders.get("meta").get("input_shape")
             num_classes = data_loaders.get("meta").get("num_classes")
+
+            if subnetwork_architecture == "dnn":
+                subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
+            elif subnetwork_architecture == "cnn":
+                subnetwork = CNN(
+                    dim=input_shape[1],
+                    input_dim=(1 if len(input_shape) < 4 else input_shape[3]),
+                    num_classes=num_classes,
+                )
+            elif subnetwork_architecture == "lenet":
+                subnetwork = LeNet(
+                    dim=input_shape[1],
+                    channel_dim=(1 if len(input_shape) < 4 else input_shape[3]),
+                    num_classes=num_classes,
+                )
 
 
 def parse_args():
