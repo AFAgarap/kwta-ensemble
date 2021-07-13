@@ -93,6 +93,17 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                 )
 
+            model = MoE(
+                num_features=num_features,
+                input_shape=input_shape,
+                expert_model=subnetwork,
+                gating_model=gating,
+                num_experts=num_subnetwork,
+                optimizer=optimizer,
+                learning_rate=learning_rate,
+                weight_decay=weight_decay,
+            )
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="MoE classifier")
