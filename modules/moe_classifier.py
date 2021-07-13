@@ -80,17 +80,28 @@ def main(arguments: argparse.Namespace):
 
             if subnetwork_architecture == "dnn":
                 subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
+                gating = DNN(units=((num_features, 100), (100, num_subnetwork)))
             elif subnetwork_architecture == "cnn":
                 subnetwork = CNN(
                     dim=input_shape[1],
                     input_dim=(1 if len(input_shape) < 4 else input_shape[3]),
                     num_classes=num_classes,
                 )
+                gating = CNN(
+                    dim=input_shape[1],
+                    input_dim=(1 if len(input_shape) < 4 else input_shape[3]),
+                    num_classes=num_subnetwork,
+                )
             elif subnetwork_architecture == "lenet":
                 subnetwork = LeNet(
                     dim=input_shape[1],
                     channel_dim=(1 if len(input_shape) < 4 else input_shape[3]),
                     num_classes=num_classes,
+                )
+                gating = LeNet(
+                    dim=input_shape[1],
+                    channel_dim=(1 if len(input_shape) < 4 else input_shape[3]),
+                    num_classes=num_subnetwork,
                 )
 
             model = MoE(
