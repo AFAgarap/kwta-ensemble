@@ -114,8 +114,7 @@ def main(arguments: argparse.Namespace):
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
             )
-            model.fit(train_loader, valid_loader, epochs=epochs,
-                      show_every=show_every)
+            model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
 
 
 def parse_args():
