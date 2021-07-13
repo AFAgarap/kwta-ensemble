@@ -20,6 +20,7 @@ import argparse
 from moe.models import MoE
 
 from kwta_ensemble.models import DNN
+from kwta_ensemble.utils import set_global_seed
 
 
 def main(arguments: argparse.Namespace):
@@ -56,6 +57,8 @@ def main(arguments: argparse.Namespace):
             print(f"[INFO] Dataset: {dataset}")
             print(f"[INFO] Number of learners: {num_subnetwork}")
             print(f"[INFO] Seed: {seed}")
+
+            set_global_seed(seed)
 
 
 def parse_args():
