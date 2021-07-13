@@ -123,6 +123,8 @@ def main(arguments: argparse.Namespace):
             results[f"valid_loss_{seed}"] = model.valid_loss
             results[f"valid_acc_{seed}"] = model.valid_accuracy
 
+            print(f"Test acc: {accuracy:.4f}")
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="MoE classifier")
