@@ -121,8 +121,6 @@ def get_moe_filename(
     num_subnetwork: int,
     expert_gating_architecture: str,
     dataset: str,
-    use_feature_extractor: bool,
-    feature_extractor_arch: str,
     learning_rate: float,
     optimizer: str,
     batch_size: int,
