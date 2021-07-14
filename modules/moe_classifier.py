@@ -113,6 +113,7 @@ def main(arguments: argparse.Namespace):
             model = MoE(
                 num_features=num_features,
                 input_shape=input_shape,
+                output_dim=num_classes,
                 expert_model=subnetwork,
                 gating_model=gating,
                 num_experts=num_subnetwork,
