@@ -117,6 +117,20 @@ def create_dataloaders(
     return data_loaders
 
 
+def get_moe_filename(
+    num_subnetwork: int,
+    expert_gating_architecture: str,
+    dataset: str,
+    learning_rate: float,
+    optimizer: str,
+    batch_size: int,
+) -> str:
+    filename = f"moe-{num_subnetwork}-{expert_gating_architecture}"
+    filename = f"{filename}-{dataset}"
+    filename = f"{filename}-{learning_rate}-lr-opt-{optimizer}-{batch_size}-bsize"
+    return filename
+
+
 def get_ensemble_filename(
     num_subnetwork: int,
     subnetwork_architecture: str,
