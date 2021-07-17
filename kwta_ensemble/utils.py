@@ -22,9 +22,11 @@ import random
 from typing import Dict, List, Tuple
 
 from imblearn.over_sampling import RandomOverSampler
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from pt_datasets import load_dataset, create_dataloader
+import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix
 import torch
 
@@ -263,6 +265,61 @@ def compute_learner_accuracy_per_class(outputs: List, labels: torch.Tensor) -> L
     class_accuracy = matrix.diagonal()
     class_accuracies.append(class_accuracy)
     return class_accuracies
+
+
+def plot_activations(
+    index: int,
+    features: torch.Tensor,
+    labels: torch.Tensor,
+    classes: List,
+    outputs: List,
+    model_output: torch.Tensor,
+) -> None:
+    """
+    Plots the input image and the model scores.
+
+    Parameters
+    ----------
+    index: int
+        The index of the example to plot.
+    features: torch.Tensor
+        The example features.
+    labels: torch.Tensor
+        The example label.
+    classes: List
+        The list of target classes.
+    outputs: List
+        The list of model learner outputs.
+    model_output: torch.Tensor
+        The final model output.
+    """
+    sns.set_style("dark")
+    num_outputs = len(outputs) + 2
+
+    plt.rcParams.update({"font.size": 16})
+
+    plt.subplot(1, num_outputs, 1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(features[index].detach().numpy().reshape(28, 28), cmap=plt.cm.binary)
+    plt.title(f"Class {labels[index]} ({classes[labels[index]]})")
+
+    for expert_index in range(len(outputs)):
+        plt.subplot(1, num_outputs, expert_index + 2)
+        plt.xticks(range(len(classes)), classes, rotation=90)
+        plt.yticks([])
+        plt.ylim([0, 1])
+        plt.bar(range(10), outputs[expert_index][index].detach().numpy())
+        plt.title(f"Sub-network {expert_index + 1} output")
+    plt.subplot(1, num_outputs, len(outputs) + 2)
+    plt.xticks(range(len(classes)), classes, rotation=90)
+    plt.yticks([])
+    plt.ylim([0, 1])
+    plt.bar(range(10), model_output[index].detach().numpy(), color="red")
+    predicted, class_index = torch.max(model_output[index].detach(), 0)
+    plt.title(f"Final output: {class_index} ({predicted:.5f}%)")
+    plt.tight_layout()
+    plt.show()
 
 
 def display_accuracies(accuracies: List) -> None:
