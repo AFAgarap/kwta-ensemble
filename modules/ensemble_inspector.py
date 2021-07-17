@@ -28,6 +28,7 @@ from kwta_ensemble.utils import (
     display_accuracies,
     display_learner_accuracy_per_class,
     display_reports,
+    plot_activations,
 )
 
 
@@ -38,7 +39,7 @@ num_learners = int(filename.split("-", 6)[3])
 learners_arch = filename.split("-", 6)[4]
 dataset = filename.split("-", 6)[5]
 
-train_data, test_data = load_dataset(dataset)
+_, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
 
 learner = DNN(units=((784, 100), (100, 10)))
@@ -63,6 +64,16 @@ learner_reports = compute_learner_classification_report(
 )
 learner_class_accuracies = compute_learner_accuracy_per_class(
     outputs=[outputs, *learner_outputs], labels=labels
+)
+
+index = int(sys.argv[2])
+plot_activations(
+    index=index,
+    features=features,
+    labels=labels,
+    classes=test_data.classes,
+    outputs=learner_outputs,
+    model_output=outputs,
 )
 
 display_accuracies(accuracies=[accuracy, *learner_accuracies])
