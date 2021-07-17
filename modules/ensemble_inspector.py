@@ -21,6 +21,7 @@ from sklearn.metrics import classification_report
 import torch
 
 from kwta_ensemble.models import DNN, Ensemble
+from kwta_ensemble.utils import compute_learner_accuracy
 
 
 filename = sys.argv[1]
@@ -50,3 +51,5 @@ learner_outputs = list(map(lambda learner: learner(features), model.model))
 learner_outputs = list(
     map(lambda outputs: torch.nn.functional.softmax(outputs), learner_outputs)
 )
+
+learner_accuracies = compute_learner_accuracy(outputs=learner_outputs, labels=labels)
