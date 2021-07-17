@@ -18,7 +18,7 @@
 import json
 from math import ceil, floor
 import os
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 import random
 
@@ -188,3 +188,25 @@ def export_results(model_results: Dict, filename: str) -> None:
         results[key] = value
     with open(filename, "w") as file:
         json.dump(results, file)
+
+
+def compute_learner_accuracy(outputs: List, labels: torch.Tensor) -> List:
+    """
+    Computes the accuracy of each output in `outputs`.
+
+    Parameters
+    ----------
+    outputs: List
+        The list of model outputs.
+    labels: torch.Tensor
+        The target outputs tensor.
+
+    Returns
+    -------
+    accuracies: List
+        The list of accuracy of each output in `outputs`.
+    """
+    accuracies = [
+        (output.argmax(1) == labels).sum().item() / len(labels) for output in outputs
+    ]
+    return accuracies
