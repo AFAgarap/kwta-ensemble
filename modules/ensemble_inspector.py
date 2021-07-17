@@ -32,6 +32,8 @@ train_data, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
 
 learner = DNN(units=((784, 100), (100, 10)))
-model = Ensemble(network=learner, num_subnetwork=num_learners)
+model = Ensemble(network=learner, num_subnetworks=num_learners)
 model.load_model(filename)
 model = model.cpu()
+
+accuracy = model.score(test_loader)
