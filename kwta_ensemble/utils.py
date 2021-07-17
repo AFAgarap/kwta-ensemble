@@ -236,7 +236,7 @@ def compute_learner_classification_report(outputs: List, labels: torch.Tensor) -
     return reports
 
 
-def compute_expert_accuracy_per_class(outputs: List, labels: torch.Tensor) -> List:
+def compute_learner_accuracy_per_class(outputs: List, labels: torch.Tensor) -> List:
     """
     Computes the accuracy per class of each output in `outputs`.
 
