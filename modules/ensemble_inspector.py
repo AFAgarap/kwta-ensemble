@@ -29,6 +29,7 @@ from kwta_ensemble.utils import (
     display_learner_accuracy_per_class,
     display_reports,
     plot_activations,
+    set_global_seed,
 )
 
 
@@ -39,6 +40,7 @@ num_learners = int(filename.split("-", 6)[3])
 learners_arch = filename.split("-", 6)[4]
 dataset = filename.split("-", 6)[5]
 
+set_global_seed(seed)
 _, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
 
