@@ -249,7 +249,7 @@ class Model(torch.nn.Module):
             The filename for the exported model.
         """
         print("[INFO] Exporting trained model...")
-        model_name = filename.split("-")[3]
+        model_name = filename.split("-")[2]
         dataset_name = filename.split("-")[5]
         model_path = os.path.join("outputs", "models", model_name, dataset_name)
         if not os.path.exists(model_path):
@@ -270,7 +270,7 @@ class Model(torch.nn.Module):
             The filename for the exported model to load.
         """
         print("[INFO] Loading the trained model...")
-        model_name = filename.split("-")[3]
+        model_name = filename.split("-")[2]
         dataset_name = filename.split("-")[5]
         model_path = os.path.join("outputs", "models", model_name, dataset_name)
         if not filename.endswith(".pth"):
