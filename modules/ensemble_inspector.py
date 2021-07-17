@@ -68,6 +68,8 @@ learner_class_accuracies = compute_learner_accuracy_per_class(
     outputs=[outputs, *learner_outputs], labels=labels
 )
 
+outputs = torch.nn.functional.softmax(outputs)
+
 index = int(sys.argv[2])
 plot_activations(
     index=index,
