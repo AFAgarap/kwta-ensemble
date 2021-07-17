@@ -158,7 +158,7 @@ def get_kwta_enn_filename(
     competition_delay: int,
     sparsity_factor: float,
 ) -> str:
-    filename = f"ensemble-{num_subnetwork}-{subnetwork_architecture}"
+    filename = f"kwta_enn-{num_subnetwork}-{subnetwork_architecture}"
     filename = f"{filename}-{dataset}"
     filename = f"{filename}-cd-{competition_delay}-s-{sparsity_factor}"
     filename = f"{filename}-{learning_rate}-lr-opt-{optimizer}-{batch_size}-bsize"
