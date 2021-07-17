@@ -19,6 +19,8 @@ import sys
 
 from pt_datasets import create_dataloader, load_dataset
 
+from kwta_ensemble.utils import set_global_seed
+
 
 filename = sys.argv[1]
 seed = int(filename.split("-", 6)[0])
@@ -27,5 +29,6 @@ num_learners = int(filename.split("-", 6)[3])
 learners_arch = filename.split("-", 6)[4]
 dataset = filename.split("-", 6)[5]
 
+set_global_seed(seed)
 _, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
