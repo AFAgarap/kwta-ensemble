@@ -18,13 +18,16 @@
 import json
 from math import ceil, floor
 import os
-from typing import Dict, Tuple
-
 import random
+from typing import Dict, List, Tuple
 
 from imblearn.over_sampling import RandomOverSampler
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from pt_datasets import load_dataset, create_dataloader
+import seaborn as sns
+from sklearn.metrics import classification_report, confusion_matrix
 import torch
 
 
@@ -188,3 +191,158 @@ def export_results(model_results: Dict, filename: str) -> None:
         results[key] = value
     with open(filename, "w") as file:
         json.dump(results, file)
+
+
+def compute_learner_accuracy(outputs: List, labels: torch.Tensor) -> List:
+    """
+    Computes the accuracy of each output in `outputs`.
+
+    Parameters
+    ----------
+    outputs: List
+        The list of model outputs.
+    labels: torch.Tensor
+        The target outputs tensor.
+
+    Returns
+    -------
+    accuracies: List
+        The list of accuracy of each output in `outputs`.
+    """
+    accuracies = [
+        (output.argmax(1) == labels).sum().item() / len(labels) for output in outputs
+    ]
+    return accuracies
+
+
+def compute_learner_classification_report(outputs: List, labels: torch.Tensor) -> List:
+    """
+    Computes the classification report of each output in `outputs`.
+
+    Parameters
+    ----------
+    outputs: List
+        The list of model outputs.
+    labels: torch.Tensor
+        The target outputs tensor.
+
+    Returns
+    -------
+    reports: List
+        The list of classification report for each output in `outputs`.
+    """
+    reports = [
+        classification_report(output.argmax(1).detach().numpy(), labels.numpy())
+        for output in outputs
+    ]
+    return reports
+
+
+def compute_learner_accuracy_per_class(outputs: List, labels: torch.Tensor) -> List:
+    """
+    Computes the accuracy per class of each output in `outputs`.
+
+    Parameters
+    ----------
+    outputs: List
+        The list of model outputs.
+    labels: torch.Tensor
+        The target outputs tensor.
+
+    Returns
+    -------
+    class_accuracies: List
+        The accuracy per class of each output in `outputs`.
+    """
+    class_accuracies = list()
+    for output in outputs[1:]:
+        matrix = confusion_matrix(output.argmax(1).detach().numpy(), labels.numpy())
+        matrix = matrix.astype("float") / matrix.sum(axis=1)[:, np.newaxis]
+        class_accuracy = matrix.diagonal()
+        class_accuracies.append(class_accuracy)
+    matrix = confusion_matrix(outputs[0].argmax(1).detach().numpy(), labels.numpy())
+    matrix = matrix.astype("float") / matrix.sum(axis=1)[:, np.newaxis]
+    class_accuracy = matrix.diagonal()
+    class_accuracies.append(class_accuracy)
+    return class_accuracies
+
+
+def plot_activations(
+    index: int,
+    features: torch.Tensor,
+    labels: torch.Tensor,
+    classes: List,
+    outputs: List,
+    model_output: torch.Tensor,
+) -> None:
+    """
+    Plots the input image and the model scores.
+
+    Parameters
+    ----------
+    index: int
+        The index of the example to plot.
+    features: torch.Tensor
+        The example features.
+    labels: torch.Tensor
+        The example label.
+    classes: List
+        The list of target classes.
+    outputs: List
+        The list of model learner outputs.
+    model_output: torch.Tensor
+        The final model output.
+    """
+    sns.set_style("dark")
+    num_outputs = len(outputs) + 2
+
+    plt.rcParams.update({"font.size": 16})
+
+    plt.subplot(1, num_outputs, 1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(features[index].detach().numpy().reshape(28, 28), cmap=plt.cm.binary)
+    plt.title(f"Class {labels[index]} ({classes[labels[index]]})")
+
+    for expert_index in range(len(outputs)):
+        plt.subplot(1, num_outputs, expert_index + 2)
+        plt.xticks(range(len(classes)), classes, rotation=90)
+        plt.yticks([])
+        plt.ylim([0, 1])
+        plt.bar(range(10), outputs[expert_index][index].detach().numpy())
+        plt.title(f"Sub-network {expert_index + 1} output")
+    plt.subplot(1, num_outputs, len(outputs) + 2)
+    plt.xticks(range(len(classes)), classes, rotation=90)
+    plt.yticks([])
+    plt.ylim([0, 1])
+    plt.bar(range(10), model_output[index].detach().numpy(), color="red")
+    predicted, class_index = torch.max(model_output[index].detach(), 0)
+    plt.title(f"Final output: {class_index} ({predicted:.5f}%)")
+    plt.tight_layout()
+    plt.show()
+
+
+def display_accuracies(accuracies: List) -> None:
+    print(f"Model accuracy: {accuracies[0]:.4f}")
+    for index, accuracy in enumerate(accuracies[1:]):
+        print(f"Expert {index + 1} accuracy: {(accuracy * 100.0):.4f}")
+
+
+def display_reports(reports: List) -> None:
+    print("Model classification report")
+    print("-" * 50)
+    print(reports[0])
+
+    for index, report in enumerate(reports[1:]):
+        print()
+        print(f"Expert {index + 1} classification report")
+        print("-" * 50)
+        print(report)
+
+
+def display_learner_accuracy_per_class(accuracies: List) -> None:
+    df = pd.DataFrame(np.stack(accuracies)).T
+    df.columns = [f"Expert {index + 1}" for index in range(len(accuracies))]
+    df.columns = [*df.columns[:-1], "Model"]
+    df.index = [f"Class {index + 1}" for index in range(len(accuracies[0]))]
+    print(df)
