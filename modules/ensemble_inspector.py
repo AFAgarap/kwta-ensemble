@@ -23,6 +23,7 @@ import torch
 from kwta_ensemble.models import DNN, Ensemble
 from kwta_ensemble.utils import (
     compute_learner_accuracy,
+    compute_learner_accuracy_per_class,
     compute_learner_classification_report,
 )
 
@@ -56,4 +57,7 @@ learner_outputs = list(
 learner_accuracies = compute_learner_accuracy(outputs=learner_outputs, labels=labels)
 learner_reports = compute_learner_classification_report(
     outputs=learner_outputs, labels=labels
+)
+learner_class_accuracies = compute_learner_accuracy_per_class(
+    outputs=[outputs, *learner_outputs], labels=labels
 )
