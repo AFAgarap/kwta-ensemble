@@ -18,6 +18,7 @@ import sys
 
 from pt_datasets import create_dataloader, load_dataset
 from sklearn.metrics import classification_report
+import torch
 
 from kwta_ensemble.models import DNN, Ensemble
 
@@ -45,3 +46,7 @@ report = classification_report(outputs.argmax(1).detach().numpy(), labels.numpy(
 
 # learner_outputs = [model.model[index](features) for index in range(num_learners)]
 learner_outputs = list(map(lambda learner: learner(features), model.model))
+
+learner_outputs = list(
+    map(lambda outputs: torch.nn.functional.softmax(outputs), learner_outputs)
+)
