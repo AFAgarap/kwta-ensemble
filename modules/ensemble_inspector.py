@@ -25,6 +25,9 @@ from kwta_ensemble.utils import (
     compute_learner_accuracy,
     compute_learner_accuracy_per_class,
     compute_learner_classification_report,
+    display_accuracies,
+    display_learner_accuracy_per_class,
+    display_reports,
 )
 
 
@@ -61,3 +64,7 @@ learner_reports = compute_learner_classification_report(
 learner_class_accuracies = compute_learner_accuracy_per_class(
     outputs=[outputs, *learner_outputs], labels=labels
 )
+
+display_accuracies(accuracies=[accuracy, *learner_accuracies])
+display_reports(reports=[report, *learner_reports])
+display_learner_accuracy_per_class(accuracies=learner_class_accuracies)
