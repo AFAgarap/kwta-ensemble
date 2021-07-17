@@ -18,6 +18,8 @@ import sys
 
 from pt_datasets import create_dataloader, load_dataset
 
+from kwta_ensemble.models import DNN, Ensemble
+
 
 filename = sys.argv[1]
 seed = int(filename.split("-", 6)[0])
@@ -28,3 +30,6 @@ dataset = filename.split("-", 6)[5]
 
 train_data, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
+
+learner = DNN(units=((784, 100), (100, 10)))
+model = Ensemble(network=learner, num_subnetwork=num_learners)
