@@ -283,7 +283,7 @@ def display_reports(reports: List) -> None:
         print(report)
 
 
-def display_expert_accuracy_per_class(accuracies: List) -> None:
+def display_learner_accuracy_per_class(accuracies: List) -> None:
     df = pd.DataFrame(np.stack(accuracies)).T
     df.columns = [f"Expert {index + 1}" for index in range(len(accuracies))]
     df.columns = [*df.columns[:-1], "Model"]
