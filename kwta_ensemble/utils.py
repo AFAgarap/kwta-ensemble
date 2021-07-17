@@ -18,12 +18,12 @@
 import json
 from math import ceil, floor
 import os
-from typing import Dict, List, Tuple
-
 import random
+from typing import Dict, List, Tuple
 
 from imblearn.over_sampling import RandomOverSampler
 import numpy as np
+import pandas as pd
 from pt_datasets import load_dataset, create_dataloader
 from sklearn.metrics import classification_report, confusion_matrix
 import torch
@@ -263,3 +263,29 @@ def compute_learner_accuracy_per_class(outputs: List, labels: torch.Tensor) -> L
     class_accuracy = matrix.diagonal()
     class_accuracies.append(class_accuracy)
     return class_accuracies
+
+
+def display_accuracies(accuracies: List) -> None:
+    print(f"Model accuracy: {accuracies[0]:.4f}")
+    for index, accuracy in enumerate(accuracies[1:]):
+        print(f"Expert {index + 1} accuracy: {(accuracy * 100.0):.4f}")
+
+
+def display_reports(reports: List) -> None:
+    print("Model classification report")
+    print("-" * 50)
+    print(reports[0])
+
+    for index, report in enumerate(reports[1:]):
+        print()
+        print(f"Expert {index + 1} classification report")
+        print("-" * 50)
+        print(report)
+
+
+def display_expert_accuracy_per_class(accuracies: List) -> None:
+    df = pd.DataFrame(np.stack(accuracies)).T
+    df.columns = [f"Expert {index + 1}" for index in range(len(accuracies))]
+    df.columns = [*df.columns[:-1], "Model"]
+    df.index = [f"Class {index + 1}" for index in range(len(accuracies[0]))]
+    print(df)
