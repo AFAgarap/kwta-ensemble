@@ -19,6 +19,7 @@ import sys
 
 from pt_datasets import create_dataloader, load_dataset
 
+from kwta_ensemble.models import DNN, kWTAEnsemble
 from kwta_ensemble.utils import set_global_seed
 
 
@@ -32,3 +33,6 @@ dataset = filename.split("-", 6)[5]
 set_global_seed(seed)
 _, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
+
+learner = DNN(units=((784, 100), (100, 10)))
+model = kWTAEnsemble(network=learner, num_subnetworks=num_learners)
