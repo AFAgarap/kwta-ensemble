@@ -25,6 +25,7 @@ import random
 from imblearn.over_sampling import RandomOverSampler
 import numpy as np
 from pt_datasets import load_dataset, create_dataloader
+from sklearn.metrics import classification_report
 import torch
 
 
@@ -210,3 +211,26 @@ def compute_learner_accuracy(outputs: List, labels: torch.Tensor) -> List:
         (output.argmax(1) == labels).sum().item() / len(labels) for output in outputs
     ]
     return accuracies
+
+
+def compute_learner_classification_report(outputs: List, labels: torch.Tensor) -> List:
+    """
+    Computes the classification report of each output in `outputs`.
+
+    Parameters
+    ----------
+    outputs: List
+        The list of model outputs.
+    labels: torch.Tensor
+        The target outputs tensor.
+
+    Returns
+    -------
+    reports: List
+        The list of classification report for each output in `outputs`.
+    """
+    reports = [
+        classification_report(output.argmax(1).detach().numpy(), labels.numpy())
+        for output in outputs
+    ]
+    return reports
