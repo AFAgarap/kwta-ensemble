@@ -35,6 +35,6 @@ _, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
 
 learner = DNN(units=((784, 100), (100, 10)))
-model = kWTAEnsemble(network=learner, num_subnetworks=num_learners)
+model = kWTAEnsemble(expert_model=learner, num_subnetworks=num_learners, num_classes=10)
 model.load_model(filename)
 model = model.cpu()
