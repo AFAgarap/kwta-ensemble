@@ -25,7 +25,7 @@ import random
 from imblearn.over_sampling import RandomOverSampler
 import numpy as np
 from pt_datasets import load_dataset, create_dataloader
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 import torch
 
 
@@ -234,3 +234,32 @@ def compute_learner_classification_report(outputs: List, labels: torch.Tensor) -
         for output in outputs
     ]
     return reports
+
+
+def compute_expert_accuracy_per_class(outputs: List, labels: torch.Tensor) -> List:
+    """
+    Computes the accuracy per class of each output in `outputs`.
+
+    Parameters
+    ----------
+    outputs: List
+        The list of model outputs.
+    labels: torch.Tensor
+        The target outputs tensor.
+
+    Returns
+    -------
+    class_accuracies: List
+        The accuracy per class of each output in `outputs`.
+    """
+    class_accuracies = list()
+    for output in outputs[1:]:
+        matrix = confusion_matrix(output.argmax(1).detach().numpy(), labels.numpy())
+        matrix = matrix.astype("float") / matrix.sum(axis=1)[:, np.newaxis]
+        class_accuracy = matrix.diagonal()
+        class_accuracies.append(class_accuracy)
+    matrix = confusion_matrix(outputs[0].argmax(1).detach().numpy(), labels.numpy())
+    matrix = matrix.astype("float") / matrix.sum(axis=1)[:, np.newaxis]
+    class_accuracy = matrix.diagonal()
+    class_accuracies.append(class_accuracy)
+    return class_accuracies
