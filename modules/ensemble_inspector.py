@@ -45,9 +45,7 @@ for features, labels in test_loader:
 
 report = classification_report(outputs.argmax(1).detach().numpy(), labels.numpy())
 
-# learner_outputs = [model.model[index](features) for index in range(num_learners)]
 learner_outputs = list(map(lambda learner: learner(features), model.model))
-
 learner_outputs = list(
     map(lambda outputs: torch.nn.functional.softmax(outputs), learner_outputs)
 )
