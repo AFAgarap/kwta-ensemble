@@ -27,6 +27,7 @@ from kwta_ensemble.utils import (
     compute_learner_accuracy,
     compute_learner_accuracy_per_class,
     compute_learner_classification_report,
+    plot_activations,
     set_global_seed,
 )
 
@@ -99,3 +100,13 @@ expert_outputs = list(
 )
 
 outputs = torch.nn.functional.softmax(outputs)
+
+index = int(sys.argv[2])
+plot_activations(
+    index=index,
+    features=features,
+    labels=labels,
+    classes=test_data.classes,
+    outputs=expert_outputs,
+    model_outputs=outputs,
+)
