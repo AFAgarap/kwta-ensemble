@@ -81,3 +81,4 @@ for features, labels in test_loader:
 report = classification_report(outputs.argmax(1).detach().numpy(), labels.nump())
 
 expert_outputs = list(map(lambda expert: expert(features), model.experts))
+expert_logits = compute_expert_wta_outputs(model, outputs, len(test_data))
