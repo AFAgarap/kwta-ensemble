@@ -87,7 +87,7 @@ accuracy = model.score(test_loader)
 for features, labels in test_loader:
     outputs = model.predict(features)
 
-report = classification_report(outputs.argmax(1).detach().numpy(), labels.nump())
+report = classification_report(outputs.argmax(1).detach().numpy(), labels.numpy())
 
 expert_outputs = list(map(lambda expert: expert(features), model.experts))
 expert_logits = compute_expert_wta_outputs(model, outputs, len(test_data))
