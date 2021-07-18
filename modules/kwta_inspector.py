@@ -56,10 +56,9 @@ def compute_expert_wta_outputs(
         The kWTA outputs of experts.
     """
     num_classes = 10
-    num_experts = len(expert_outputs)
     expert_logits = list()
     for index in range(len(expert_outputs)):
-        zeros = torch.zeros(num_data, (num_experts * num_classes))
+        zeros = torch.zeros(num_data, (model.num_subnetworks * num_classes))
         offset = index * num_classes
         zeros[:, offset : offset + num_classes] = expert_outputs[index]
         logits = model.competitive_layer(zeros)
@@ -90,7 +89,7 @@ for features, labels in test_loader:
 report = classification_report(outputs.argmax(1).detach().numpy(), labels.numpy())
 
 expert_outputs = list(map(lambda expert: expert(features), model.experts))
-expert_logits = compute_expert_wta_outputs(model, outputs, len(test_data))
+expert_logits = compute_expert_wta_outputs(model, expert_outputs, len(test_data))
 expert_accuracies = compute_learner_accuracy(outputs=expert_logits, labels=labels)
 expert_reports = compute_learner_classification_report(
     outputs=expert_logits, labels=labels
