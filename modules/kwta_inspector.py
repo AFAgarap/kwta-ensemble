@@ -45,3 +45,5 @@ for features, labels in test_loader:
     outputs = model.predict(features)
 
 report = classification_report(outputs.argmax(1).detach().numpy(), labels.nump())
+
+expert_outputs = list(map(lambda expert: expert(features), model.experts))
