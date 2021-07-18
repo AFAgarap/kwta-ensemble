@@ -16,12 +16,46 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Inspector module for kWTA Ensemble"""
 import sys
+from typing import List
 
 from pt_datasets import create_dataloader, load_dataset
 from sklearn.metrics import classification_report
+import torch
 
 from kwta_ensemble.models import DNN, kWTAEnsemble
 from kwta_ensemble.utils import set_global_seed
+
+
+def compute_expert_wta_outputs(
+    model: torch.nn.Module, expert_outputs: List, num_data: int
+) -> List:
+    """
+    Computes the kWTA outputs of each expert in `model`.
+
+    Parameters
+    ----------
+    model: torch.nn.Module
+        The kWTA ensemble model.
+    expert_outputs: List
+        The individual expert outputs.
+    num_data: int
+        The number of examples to create.
+
+    Returns
+    -------
+    expert_logits: List
+        The kWTA outputs of experts.
+    """
+    num_classes = 10
+    num_experts = len(expert_outputs)
+    expert_logits = list()
+    for index in range(len(expert_outputs)):
+        zeros = torch.zeros(num_data, (num_experts * num_classes))
+        offset = index * num_classes
+        zeros[:, offset : offset + num_classes] = expert_outputs[index]
+        logits = model.competitive_layer(zeros)
+        expert_logits.append(logits)
+    return expert_logits
 
 
 filename = sys.argv[1]
