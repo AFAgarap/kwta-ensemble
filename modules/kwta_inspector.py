@@ -110,7 +110,7 @@ plot_activations(
     labels=labels,
     classes=test_data.classes,
     outputs=expert_outputs,
-    model_outputs=outputs,
+    model_output=outputs,
 )
 
 display_accuracies(accuracies=[accuracy, *expert_accuracies])
