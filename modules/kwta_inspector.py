@@ -18,6 +18,7 @@
 import sys
 
 from pt_datasets import create_dataloader, load_dataset
+from sklearn.metrics import classification_report
 
 from kwta_ensemble.models import DNN, kWTAEnsemble
 from kwta_ensemble.utils import set_global_seed
@@ -38,3 +39,9 @@ learner = DNN(units=((784, 100), (100, 10)))
 model = kWTAEnsemble(expert_model=learner, num_subnetworks=num_learners, num_classes=10)
 model.load_model(filename)
 model = model.cpu()
+
+accuracy = model.score(test_loader)
+for features, labels in test_loader:
+    outputs = model.predict(features)
+
+report = classification_report(outputs.argmax(1).detach().numpy(), labels.nump())
