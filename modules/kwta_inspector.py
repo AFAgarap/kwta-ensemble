@@ -23,7 +23,11 @@ from sklearn.metrics import classification_report
 import torch
 
 from kwta_ensemble.models import DNN, kWTAEnsemble
-from kwta_ensemble.utils import compute_learner_accuracy, set_global_seed
+from kwta_ensemble.utils import (
+    compute_learner_accuracy,
+    compute_learner_classification_report,
+    set_global_seed,
+)
 
 
 def compute_expert_wta_outputs(
@@ -83,3 +87,6 @@ report = classification_report(outputs.argmax(1).detach().numpy(), labels.nump()
 expert_outputs = list(map(lambda expert: expert(features), model.experts))
 expert_logits = compute_expert_wta_outputs(model, outputs, len(test_data))
 expert_accuracies = compute_learner_accuracy(outputs=expert_logits, labels=labels)
+expert_reports = compute_learner_classification_report(
+    outputs=expert_logits, labels=labels
+)
