@@ -94,3 +94,6 @@ expert_reports = compute_learner_classification_report(
 expert_class_accuracies = compute_learner_accuracy_per_class(
     outputs=[outputs, *expert_logits], labels=labels
 )
+expert_outputs = list(
+    map(lambda output: torch.nn.functional.softmax(output), expert_outputs)
+)
