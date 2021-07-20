@@ -43,3 +43,5 @@ model.load_model(filename)
 model = model.cpu()
 
 accuracy = model.score(test_loader)
+for features, labels in test_loader:
+    outputs = model.predict(features)
