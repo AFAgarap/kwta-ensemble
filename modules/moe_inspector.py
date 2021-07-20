@@ -19,6 +19,7 @@ import sys
 
 from moe.models import MoE
 from pt_datasets import create_dataloader, load_dataset
+from sklearn.metrics import classification_report
 
 from kwta_ensemble.models import DNN
 from kwta_ensemble.utils import set_global_seed
@@ -45,3 +46,5 @@ model = model.cpu()
 accuracy = model.score(test_loader)
 for features, labels in test_loader:
     outputs = model.predict(features)
+
+report = classification_report(outputs.argmax(1).detach().numpy(), labels.numpy())
