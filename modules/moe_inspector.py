@@ -14,3 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+"""Inspector for MoE classifier outputs"""
+import sys
+
+
+filename = sys.argv[1]
+seed = int(filename.split("-", 6)[0])
+model = filename.split("-", 6)[2]
+num_learners = int(filename.split("-", 6)[3])
+learners_arch = filename.split("-", 6)[4]
+dataset = filename.split("-", 6)[5]
