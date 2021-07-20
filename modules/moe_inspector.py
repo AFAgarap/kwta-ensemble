@@ -41,3 +41,5 @@ gating = DNN(units=((784, 100), (100, num_learners)))
 model = MoE(expert_model=expert, gating_model=gating, num_experts=num_learners)
 model.load_model(filename)
 model = model.cpu()
+
+accuracy = model.score(test_loader)
