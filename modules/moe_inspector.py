@@ -17,6 +17,8 @@
 """Inspector for MoE classifier outputs"""
 import sys
 
+from pt_datasets import create_dataloader, load_dataset
+
 from kwta_ensemble.utils import set_global_seed
 
 
@@ -29,3 +31,5 @@ dataset = filename.split("-", 6)[5]
 
 
 set_global_seed(seed)
+_, test_data = load_dataset(dataset)
+test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
