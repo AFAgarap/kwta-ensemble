@@ -17,6 +17,8 @@
 """Inspector for MoE classifier outputs"""
 import sys
 
+from kwta_ensemble.utils import set_global_seed
+
 
 filename = sys.argv[1]
 seed = int(filename.split("-", 6)[0])
@@ -24,3 +26,6 @@ model = filename.split("-", 6)[2]
 num_learners = int(filename.split("-", 6)[3])
 learners_arch = filename.split("-", 6)[4]
 dataset = filename.split("-", 6)[5]
+
+
+set_global_seed(seed)
