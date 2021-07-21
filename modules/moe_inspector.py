@@ -69,3 +69,5 @@ expert_reports = compute_learner_classification_report(
 expert_class_accuracies = compute_learner_accuracy_per_class(
     outputs=[outputs, *expert_outputs], labels=labels
 )
+
+outputs = torch.nn.functional.softmax(outputs)
