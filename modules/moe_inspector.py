@@ -25,6 +25,7 @@ import torch
 from kwta_ensemble.models import DNN
 from kwta_ensemble.utils import (
     compute_learner_accuracy,
+    compute_learner_accuracy_per_class,
     compute_learner_classification_report,
     set_global_seed,
 )
@@ -60,7 +61,11 @@ expert_outputs = list(
         lambda expert_output: torch.nn.functional.softmax(expert_output), expert_outputs
     )
 )
+
 expert_accuracies = compute_learner_accuracy(outputs=expert_outputs, labels=labels)
 expert_reports = compute_learner_classification_report(
     outputs=expert_outputs, labels=labels
+)
+expert_class_accuracies = compute_learner_accuracy_per_class(
+    outputs=[outputs, *expert_outputs], labels=labels
 )
