@@ -97,26 +97,3 @@ class kWTAEnsemble(Model):
                 activations[index] = layer(activations.get(index - 1))
         outputs = activations.get(len(activations) - 1)
         return outputs
-
-    # def epoch_train(self, data_loaders: Dict, phase: str) -> Tuple[float, float]:
-    #     epoch_loss = 0.0
-    #     epoch_accuracy = 0.0
-    #     for features, labels in data_loaders.get(phase):
-    #         features = features.to(self.device)
-    #         labels = labels.to(self.device)
-
-    #         self.optimizer.zero_grad()
-
-    #         with torch.set_grad_enabled(phase == "train"):
-    #             outputs = self(features)
-    #             loss = self.criterion(outputs, labels)
-
-    #             if phase == "train":
-    #                 loss.backward()
-    #                 self.optimizer.step()
-
-    #         epoch_loss += loss.item()
-    #         epoch_accuracy += (outputs.argmax(1) == labels).sum().item() / len(labels)
-    #     epoch_loss /= len(data_loaders.get(phase))
-    #     epoch_accuracy /= len(data_loaders.get(phase))
-    #     return epoch_loss, epoch_accuracy
