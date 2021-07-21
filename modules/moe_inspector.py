@@ -23,7 +23,7 @@ from sklearn.metrics import classification_report
 import torch
 
 from kwta_ensemble.models import DNN
-from kwta_ensemble.utils import set_global_seed
+from kwta_ensemble.utils import compute_learner_accuracy, set_global_seed
 
 
 filename = sys.argv[1]
@@ -56,3 +56,4 @@ expert_outputs = list(
         lambda expert_output: torch.nn.functional.softmax(expert_output), expert_outputs
     )
 )
+expert_accuracies = compute_learner_accuracy(outputs=expert_outputs, labels=labels)
