@@ -23,7 +23,11 @@ from sklearn.metrics import classification_report
 import torch
 
 from kwta_ensemble.models import DNN
-from kwta_ensemble.utils import compute_learner_accuracy, set_global_seed
+from kwta_ensemble.utils import (
+    compute_learner_accuracy,
+    compute_learner_classification_report,
+    set_global_seed,
+)
 
 
 filename = sys.argv[1]
@@ -57,3 +61,6 @@ expert_outputs = list(
     )
 )
 expert_accuracies = compute_learner_accuracy(outputs=expert_outputs, labels=labels)
+expert_reports = compute_learner_classification_report(
+    outputs=expert_outputs, labels=labels
+)
