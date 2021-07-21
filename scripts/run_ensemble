@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# k-Winners-Take-All Ensemble Neural Network
+# Copyright (C) 2021  Abien Fred Agarap
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+# MNIST, Fashion-MNIST, KMNIST datasets
+#   Batch size: 100
+#   Learning rate: 1e-1
+#   Epochs: 20
+#   Number of experts: 5 (runs for 2-5 experts)
+#   Expert architecture: dnn
+#   Show every: 5 (display progress every 5 epochs)
+#   Optimizer: sgd
+#   Weight decay: 1e-5
+
+# WDBC dataset
+#   Same as above except for
+#   Batch size: 40
+
+python -m modules.ensemble_classifier \
+--seeds 42 1234 73 1024 86400 31415 2718 30 22 17 \
+--dataset $1 \
+--batch_size $2 \
+--learning_rate $3 \
+--epochs 20 \
+--num_subnetworks $4 \
+--subnetwork_architecture $5 \
+--show_every 5 \
+--optimizer $6
