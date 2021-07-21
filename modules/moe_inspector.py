@@ -49,7 +49,14 @@ test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=Fa
 
 expert = DNN(units=((784, 100), (100, 10)))
 gating = DNN(units=((784, 100), (100, num_learners)))
-model = MoE(expert_model=expert, gating_model=gating, num_experts=num_learners)
+model = MoE(
+    input_shape=(60_000, 28, 28),
+    num_features=784,
+    output_dim=10,
+    expert_model=expert,
+    gating_model=gating,
+    num_experts=num_learners,
+)
 model.load_model(filename)
 model = model.cpu()
 
