@@ -39,6 +39,38 @@ class kWTAEnsemble(Model):
             "cuda:0" if torch.cuda.is_available() else "cpu"
         ),
     ):
+        """
+        Constructs a kWTA ensemble of neural networks.
+
+        Parameters
+        ----------
+        num_classes: int
+            The number of classes to train on.
+        expert_model: torch.nn.Module
+            The architecture to use in ensemble.
+        num_subnetworks: int
+            The number of networks to use in ensemble.
+        sparsity: float
+            The percentage of winners to get
+            from the competition phase.
+            Defalt: 0.75
+        competition_delay: int
+            The number of epochs to skip before using
+            the competitive layer.
+            Default: 3
+        optimizer: str
+            The optimizer to use.
+            Options: [sgd (default) | adamw]
+        learning_rate: float
+            The learning rate to use for optimization.
+            Default: 1e-3
+        weight_decay: float
+            The weight decay parameter to use.
+            Default: 1e-5
+        device: torch.device
+            The device to use for computation.
+            Default: cuda:0
+        """
         super().__init__(num_subnetworks=num_subnetworks)
         self.num_subnetworks = num_subnetworks
         self.experts = torch.nn.Sequential()
@@ -82,6 +114,21 @@ class kWTAEnsemble(Model):
             )
 
     def forward(self, features: torch.Tensor, epoch: int = 0) -> torch.Tensor:
+        """
+        The forward pass by the model.
+
+        Parameters
+        ----------
+        features: torch.Tensor
+            The input features.
+        epoch: int
+            The current training epoch.
+
+        Returns
+        -------
+        outputs: torch.Tensor
+            The model outputs.
+        """
         outputs = []
         for index in range(self.num_subnetworks):
             output = self.experts[index](features)
