@@ -27,6 +27,9 @@ from kwta_ensemble.utils import (
     compute_learner_accuracy,
     compute_learner_accuracy_per_class,
     compute_learner_classification_report,
+    display_accuracies,
+    display_learner_accuracy_per_class,
+    display_reports,
     plot_activations,
     set_global_seed,
 )
@@ -82,3 +85,7 @@ plot_activations(
     outputs=expert_outputs,
     model_output=outputs,
 )
+
+display_accuracies(accuracies=[accuracy, *expert_accuracies])
+display_reports(reports=[report, *expert_reports])
+display_learner_accuracy_per_class(accuracies=expert_class_accuracies)
