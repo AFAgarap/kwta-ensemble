@@ -20,6 +20,7 @@ import sys
 from moe.models import MoE
 from pt_datasets import create_dataloader, load_dataset
 from sklearn.metrics import classification_report
+import torch
 
 from kwta_ensemble.models import DNN
 from kwta_ensemble.utils import set_global_seed
@@ -50,3 +51,8 @@ for features, labels in test_loader:
 report = classification_report(outputs.argmax(1).detach().numpy(), labels.numpy())
 
 expert_outputs = list(map(lambda expert: expert(features), model.experts))
+expert_outputs = list(
+    map(
+        lambda expert_output: torch.nn.functional.softmax(expert_output), expert_outputs
+    )
+)
