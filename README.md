@@ -44,18 +44,16 @@ $ poetry install
 
 ## Results
 
-To demonstrate the improvement in model performance using our approach, weused
+To demonstrate the improvement in model performance using our approach, we used
 four benchmark datasets for evaluation: MNIST, Fashion-MNIST, KMNIST,
 and Wisconsin Diagnostic Breast Cancer (WDBC). We ran each model ten
 times, and we report the average, best, and standard deviation of test
 accuracies for each of our model.
 
 **Hardware and Software Configuration** We used a laptop computer withan Intel
-Core i5-6300HQ CPU with Nvidia GTX 960M GPU for training all ourmodels. Then we
-used the following arbitrarily chosen 10 random seeds for repro-ducibility: 42,
-1234, 73, 1024, 86400, 31415, 2718, 30, 22, and 17. All our modelswere
-implemented in PyTorch 1.8.1 with some additional dependencies listedin
-the to-be-released source code.
+Core i5-6300HQ CPU with Nvidia GTX 960M GPU for training all our models. Then we
+used the following arbitrarily chosen 10 random seeds for reproducibility: 42,
+1234, 73, 1024, 86400, 31415, 2718, 30, 22, and 17.
 
 ![](assets/full-results.png)
 Figure 1. Classification results on the benchmark datasets (bold values
