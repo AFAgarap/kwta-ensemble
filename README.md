@@ -55,6 +55,14 @@ Core i5-6300HQ CPU with Nvidia GTX 960M GPU for training all our models. Then we
 used the following arbitrarily chosen 10 random seeds for reproducibility: 42,
 1234, 73, 1024, 86400, 31415, 2718, 30, 22, and 17.
 
+We evaluate the performance of our proposed approach in its different
+configurations as per the competition delay parameter _d_ and compare it with our
+baseline models, Mixture-of-Experts (MoE) and Cooperative Ensemble (CE). The
+empirical evidence shows our proposed approach outperforms our baseline
+models on the benchmark datasets we used. However, we are not able to observe a
+trend in performance with respect to the varying values of d, which warrants
+further investigation.
+
 ![](assets/full-results.png)
 Figure 1. Classification results on the benchmark datasets (bold values
 represent the best results) in terms of average, best, and standard deviation
