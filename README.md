@@ -14,16 +14,16 @@ neural networks; and with a gating network assigning a specialization to each
 of its sub-networks called "experts". Instead of the aforementioned ways for
 combining a group of neural networks, we propose to use a k-Winners-Take-All
 (kWTA) activation function to act as the combination method for the outputs of
-each sub-network in the ensemble, which we call "kWTA ensemble neural networks"
-(kWTA-ENN). With kWTA, the losing neurons of the sub-networks are inhibited
-while the winning neurons are retained, which results to sub-networks having
-some form of specialization but also sharing knowledge with one another. We
-compare our approach with the cooperative ensemble of networks and
-mixture-of-experts, where we used a feed-forward network with one hidden
-layer having 100 neurons as the sub-network architecture. Our approach
-yielded a better performance than our baseline models, reaching the
-following test accuracies on benchmark datasets: 98.34% on MNIST, 88.06% on
-Fashion-MNIST, 91.61% on KMNIST, and 95.97% on WDBC.
+each sub-network in the ensemble, which we call "kWTA ensemble neural
+networks" (kWTA-ENN). With kWTA, the losing neurons of the sub-networks are
+inhibited while the winning neurons are retained, which results to sub-networks
+having some form of specialization but also sharing knowledge with one another.
+We compare our approach with the cooperative ensemble of networks and
+mixture-of-experts, where we used a feed-forward network with one hidden layer
+having 100 neurons as the sub-network architecture. Our approach yielded a
+better performance than our baseline models, reaching the following test
+accuracies on benchmark datasets: 98.34% on MNIST, 88.06% on Fashion-MNIST,
+91.61% on KMNIST, and 95.97% on WDBC.
 
 ## Usage
 
