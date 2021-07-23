@@ -73,6 +73,11 @@ $ bash scripts/run_kwta "wdbc" 100 1e-1 5 "dnn" 0 "sgd"
 
 The penultimate parameter in the commands above is the delay parameter.
 
+Note: The full results might not be completely reproduced but rather be
+on the same range of performance trend due to software and hardware
+configuration of the user. We note the hardware we used for our
+experiments below.
+
 ## Results
 
 To demonstrate the improvement in model performance using our approach, we used
