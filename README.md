@@ -42,6 +42,37 @@ $ # or
 $ poetry install
 ```
 
+The following scripts can be run to reproduce the results below:
+
+**Mixture-of-Experts** on MNIST, Fashion-MNIST, KMNIST, and WDBC.
+
+```buildoutcfg
+$ bash scripts/run_moe "mnist" 100 1e-1 5 "dnn" "sgd"
+$ bash scripts/run_moe "fashion_mnist" 100 1e-1 5 "dnn" "sgd"
+$ bash scripts/run_moe "kmnist" 100 1e-1 5 "dnn" "sgd"
+$ bash scripts/run_moe "wdbc" 40 1e-1 5 "dnn" "sgd"
+```
+
+**Cooperative Ensemble** on MNIST, Fashion-MNIST, KMNIST, and WDBC.
+
+```buildoutcfg
+$ bash scripts/run_ensemble "mnist" 100 1e-1 5 "dnn" "sgd"
+$ bash scripts/run_ensemble "fashion_mnist" 100 1e-1 5 "dnn" "sgd"
+$ bash scripts/run_ensemble "kmnist" 100 1e-1 5 "dnn" "sgd"
+$ bash scripts/run_ensemble "wdbc" 40 1e-1 5 "dnn" "sgd"
+```
+
+**kWTA-ENN** on MNIST, Fashion-MNIST, KMNIST, and WDBC.
+
+```buildoutcfg
+$ bash scripts/run_kwta "mnist" 100 1e-1 5 "dnn" 0 "sgd"
+$ bash scripts/run_kwta "fashion_mnist" 100 1e-1 5 "dnn" 0 "sgd"
+$ bash scripts/run_kwta "kmnist" 100 1e-1 5 "dnn" 0 "sgd"
+$ bash scripts/run_kwta "wdbc" 100 1e-1 5 "dnn" 0 "sgd"
+```
+
+The penultimate parameter in the commands above is the delay parameter.
+
 ## Results
 
 To demonstrate the improvement in model performance using our approach, we used
