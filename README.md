@@ -41,3 +41,35 @@ $ pip install -r requirements
 $ # or
 $ poetry install
 ```
+
+## Results
+
+![](assets/mnist-inspection.png)
+Figure 2. Predictions of each sub-network on a sample MNIST data and their respective
+final outputs. In 2a, we can infer that MoE
+sub-networks 2 and 3 are specializing on class 1. In
+2b, all CE sub-networks have high
+probability outputs for class 1. In 2c,
+kWTA-ENN sub-networks 1 and 2 helped each other but with the kWTA function, the
+neurons for other classes were most likely inhibited at inference, thus its
+higher probability output than MoE and CE.
+
+![](assets/kmnist-inspection.png)
+Figure 3. Predictions of each sub-network on a sample KMNIST data and their
+respective final outputs. In 3a, we can
+infer that MoE sub-network 2 is specializing on class 6 ("ma"). In
+3b, CE sub-network 3 was assisted by
+sub-network 2. In 3c, kWTA-ENN sub-networks
+1 and 2 helped each other but with the kWTA function, the neurons for other
+classes were most likely inhibited at inference, thus its higher probability
+output than MoE and CE.
+
+![](assets/specialization.png)
+Figure 4. Classification results of each kWTA-ENN sub-network and kWTA-ENN
+itself on MNIST (4a) and KMNIST
+(4b) datasets. The tables show the test accuracy of
+each sub-network on each dataset class, indicating a degree of specialization
+among the sub-networks. Furthermore, the final model accuracy on each class
+show that combining the sub-network outputs have stronger predictive
+capability. These divisions were in no way pre-determined but show how
+cooperation by specialization can be done through competitive ensemble.
