@@ -44,6 +44,12 @@ $ poetry install
 
 ## Results
 
+![](assets/full-results.png)
+Figure 1. Classification results on the benchmark datasets (bold values
+represent the best results) in terms of average, best, and standard deviation
+of test accuracies (in %). Our k-WTA ensemble network achieves better test
+accuracies than our baseline models.
+
 ![](assets/mnist-inspection.png)
 Figure 2. Predictions of each sub-network on a sample MNIST data and their respective
 final outputs. In 2a, we can infer that MoE
