@@ -17,9 +17,9 @@
 import sys
 from typing import List
 
+import torch
 from pt_datasets import create_dataloader, load_dataset
 from sklearn.metrics import classification_report
-import torch
 
 from kwta_ensemble.models import DNN, kWTAEnsemble
 from kwta_ensemble.utils import (

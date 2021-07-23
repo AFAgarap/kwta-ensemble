@@ -18,7 +18,7 @@ import argparse
 
 import numpy as np
 
-from kwta_ensemble.models import CNN, DNN, kWTAEnsemble, LeNet
+from kwta_ensemble.models import CNN, DNN, LeNet, kWTAEnsemble
 from kwta_ensemble.utils import (
     create_dataloaders,
     export_results,

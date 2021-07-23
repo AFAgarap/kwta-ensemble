@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """Implementation of feed-forward neural network"""
 from typing import List, Tuple
+
 import torch
 
 

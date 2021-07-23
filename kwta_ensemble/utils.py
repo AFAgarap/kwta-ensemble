@@ -15,19 +15,19 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """Utility functions module"""
 import json
-from math import ceil, floor
 import os
 import random
+from math import ceil, floor
 from typing import Dict, List, Tuple
 
-from imblearn.over_sampling import RandomOverSampler
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from pt_datasets import load_dataset, create_dataloader
 import seaborn as sns
-from sklearn.metrics import classification_report, confusion_matrix
 import torch
+from imblearn.over_sampling import RandomOverSampler
+from pt_datasets import create_dataloader, load_dataset
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 def set_global_seed(seed: int) -> None:

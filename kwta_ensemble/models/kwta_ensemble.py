@@ -19,8 +19,8 @@ from typing import Dict, Tuple
 
 import torch
 
-from kwta_ensemble.models.base import Model
 from kwta_ensemble.layers import WinnersTakeAllLayer
+from kwta_ensemble.models.base import Model
 
 
 class kWTAEnsemble(Model):

@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """Implementation of model super class"""
-from copy import deepcopy
 import os
 import time
+from copy import deepcopy
 from typing import Dict, Tuple
 
 import torch

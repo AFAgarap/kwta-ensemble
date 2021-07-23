@@ -16,8 +16,8 @@
 """MoE classifier"""
 import argparse
 
-from moe.models import MoE
 import numpy as np
+from moe.models import MoE
 
 from kwta_ensemble.models import CNN, DNN, LeNet
 from kwta_ensemble.utils import (

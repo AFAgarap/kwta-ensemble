@@ -16,9 +16,9 @@
 """Inspector module for Ensemble outputs"""
 import sys
 
+import torch
 from pt_datasets import create_dataloader, load_dataset
 from sklearn.metrics import classification_report
-import torch
 
 from kwta_ensemble.models import DNN, Ensemble
 from kwta_ensemble.utils import (
@@ -31,7 +31,6 @@ from kwta_ensemble.utils import (
     plot_activations,
     set_global_seed,
 )
-
 
 filename = sys.argv[1]
 seed = int(filename.split("-", 6)[0])
