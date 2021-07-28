@@ -90,12 +90,16 @@ def create_dataloaders(
         )
 
     num_features = np.prod(train_data.data.shape[1:])
-    if dataset != "svhn":
+    if dataset not in ("svhn", "usps"):
         input_shape = train_data.data.shape
         num_classes = len(train_data.classes)
     else:
-        input_shape = train_data.data.transpose(0, 2, 3, 1).shape
-        num_classes = len(np.unique(train_data.labels))
+        if dataset == "svhn":
+            input_shape = train_data.data.transpose(0, 2, 3, 1).shape
+            num_classes = len(np.unique(train_data.labels))
+        elif dataset == "usps":
+            input_shape = train_data.data.shape
+            num_classes = len(np.unique(train_data.targets))
 
     train_data, valid_data = torch.utils.data.random_split(
         train_data,
