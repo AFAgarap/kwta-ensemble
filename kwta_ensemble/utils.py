@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """Utility functions module"""
 import json
+import multiprocessing
 import os
 import random
 from math import ceil, floor
@@ -107,8 +108,13 @@ def create_dataloaders(
         generator=torch.Generator().manual_seed(seed),
     )
 
-    train_loader = create_dataloader(train_data, batch_size=batch_size, num_workers=4)
-    valid_loader = create_dataloader(valid_data, batch_size=batch_size, num_workers=4)
+    num_workers = multiprocessing.cpu_count()
+    train_loader = create_dataloader(
+        train_data, batch_size=batch_size, num_workers=num_workers
+    )
+    valid_loader = create_dataloader(
+        valid_data, batch_size=batch_size, num_workers=num_workers
+    )
     test_loader = create_dataloader(test_data, batch_size=len(test_data))
     data_loaders = {
         "meta": {
