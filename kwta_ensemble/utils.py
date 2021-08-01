@@ -108,7 +108,7 @@ def create_dataloaders(
         generator=torch.Generator().manual_seed(seed),
     )
 
-    num_workers = multiprocessing.cpu_count()
+    num_workers = torch.cuda.device_count() * 4
     train_loader = create_dataloader(
         train_data, batch_size=batch_size, num_workers=num_workers
     )
