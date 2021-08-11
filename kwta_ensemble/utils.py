@@ -81,7 +81,8 @@ def create_dataloaders(
         name=dataset, normalize=False, vectorizer=vectorizer, ngram_range=ngram_range
     )
 
-    if dataset == "wdbc":
+    if dataset in ["wdbc", "diabetes"]:
+        print(f"[INFO] Oversampling {dataset} dataset...")
         over_sampler = RandomOverSampler(random_state=seed)
         (train_data.data, train_data.targets) = over_sampler.fit_resample(
             train_data.data, train_data.targets
