@@ -248,6 +248,13 @@ def parse_args():
         default=0.75,
         help="the percentage of winners to get, default: [0.75]",
     )
+    group.add_argument(
+        "--use_pretrained_cifar10",
+        required=False,
+        dest="use_pretrained_cifar10",
+        action="store_true",
+    )
+    group.set_defaults(use_pretrained_cifar10=False)
     arguments = parser.parse_args()
     return arguments
 

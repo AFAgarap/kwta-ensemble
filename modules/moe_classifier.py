@@ -240,6 +240,13 @@ def parse_args():
         default="dnn",
         help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
     )
+    group.add_argument(
+        "--use_pretrained_cifar10",
+        required=False,
+        dest="use_pretrained_cifar10",
+        action="store_true",
+    )
+    group.set_defaults(use_pretrained_cifar10=False)
     arguments = parser.parse_args()
     return arguments
 
