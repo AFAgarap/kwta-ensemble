@@ -17,6 +17,7 @@
 import argparse
 
 import numpy as np
+from soconne_baseline import ResNet18, ResNet34, ResNet50
 
 from kwta_ensemble.models import CNN, DNN, Ensemble, LeNet
 from kwta_ensemble.utils import (
@@ -95,6 +96,27 @@ def main(arguments):
                     dim=input_shape[1],
                     channel_dim=(1 if len(input_shape) < 4 else input_shape[3]),
                     num_classes=num_classes,
+                )
+            elif subnetwork_architecture == "resnet18":
+                subnetwork = ResNet18(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                )
+            elif subnetwork_architecture == "resnet34":
+                subnetwork = ResNet34(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                )
+            elif subnetwork_architecture == "resnet50":
+                subnetwork = ResNet50(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
                 )
 
             model = Ensemble(
