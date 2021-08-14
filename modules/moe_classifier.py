@@ -43,6 +43,7 @@ def main(arguments: argparse.Namespace):
         show_every,
         num_subnetworks,
         subnetwork_architecture,
+        use_pretrained_cifar10,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -56,6 +57,7 @@ def main(arguments: argparse.Namespace):
         arguments.show_every,
         arguments.num_subnetworks,
         arguments.subnetwork_architecture,
+        arguments.use_pretrained_cifar10,
     )
 
     results = dict()
@@ -115,12 +117,14 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
                 gating = ResNet18(
                     input_shape=input_shape,
                     num_classes=num_subnetwork,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet34":
                 subnetwork = ResNet34(
@@ -128,12 +132,14 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
                 gating = ResNet34(
                     input_shape=input_shape,
                     num_classes=num_subnetwork,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet50":
                 subnetwork = ResNet50(
@@ -141,12 +147,14 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
                 gating = ResNet50(
                     input_shape=input_shape,
                     num_classes=num_subnetwork,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
 
             model = MoE(

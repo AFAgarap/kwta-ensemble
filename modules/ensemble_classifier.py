@@ -42,6 +42,7 @@ def main(arguments):
         num_subnetworks,
         subnetwork_architecture,
         show_every,
+        use_pretrained_cifar10,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -55,6 +56,7 @@ def main(arguments):
         arguments.num_subnetworks,
         arguments.subnetwork_architecture,
         arguments.show_every,
+        arguments.use_pretrained_cifar10,
     )
 
     results = dict()
@@ -103,6 +105,7 @@ def main(arguments):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet34":
                 subnetwork = ResNet34(
@@ -110,6 +113,7 @@ def main(arguments):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet50":
                 subnetwork = ResNet50(
@@ -117,6 +121,7 @@ def main(arguments):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
 
             model = Ensemble(

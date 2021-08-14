@@ -44,6 +44,7 @@ def main(arguments: argparse.Namespace):
         show_every,
         competition_delay,
         sparsity_factor,
+        use_pretrained_cifar10,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -59,6 +60,7 @@ def main(arguments: argparse.Namespace):
         arguments.show_every,
         arguments.use_competition_after,
         arguments.sparsity_factor,
+        arguments.use_pretrained_cifar10,
     )
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
@@ -106,6 +108,7 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet34":
                 subnetwork = ResNet34(
@@ -113,6 +116,7 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet50":
                 subnetwork = ResNet50(
@@ -120,6 +124,7 @@ def main(arguments: argparse.Namespace):
                     num_classes=num_classes,
                     learning_rate=learning_rate,
                     blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
 
             model = kWTAEnsemble(
