@@ -17,6 +17,7 @@
 import argparse
 
 import numpy as np
+from soconne_baseline import ResNet18, ResNet34, ResNet50
 
 from kwta_ensemble.models import CNN, DNN, LeNet, kWTAEnsemble
 from kwta_ensemble.utils import (
@@ -43,6 +44,7 @@ def main(arguments: argparse.Namespace):
         show_every,
         competition_delay,
         sparsity_factor,
+        use_pretrained_cifar10,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -58,6 +60,7 @@ def main(arguments: argparse.Namespace):
         arguments.show_every,
         arguments.use_competition_after,
         arguments.sparsity_factor,
+        arguments.use_pretrained_cifar10,
     )
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
@@ -98,6 +101,30 @@ def main(arguments: argparse.Namespace):
                     dim=input_shape[1],
                     channel_dim=(1 if len(input_shape) < 4 else input_shape[3]),
                     num_classes=num_classes,
+                )
+            elif subnetwork_architecture == "resnet18":
+                subnetwork = ResNet18(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
+                )
+            elif subnetwork_architecture == "resnet34":
+                subnetwork = ResNet34(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
+                )
+            elif subnetwork_architecture == "resnet50":
+                subnetwork = ResNet50(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
 
             model = kWTAEnsemble(
@@ -248,6 +275,13 @@ def parse_args():
         default=0.75,
         help="the percentage of winners to get, default: [0.75]",
     )
+    group.add_argument(
+        "--use_pretrained_cifar10",
+        required=False,
+        dest="use_pretrained_cifar10",
+        action="store_true",
+    )
+    group.set_defaults(use_pretrained_cifar10=False)
     arguments = parser.parse_args()
     return arguments
 

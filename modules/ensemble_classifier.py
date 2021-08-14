@@ -17,6 +17,7 @@
 import argparse
 
 import numpy as np
+from soconne_baseline import ResNet18, ResNet34, ResNet50
 
 from kwta_ensemble.models import CNN, DNN, Ensemble, LeNet
 from kwta_ensemble.utils import (
@@ -41,6 +42,7 @@ def main(arguments):
         num_subnetworks,
         subnetwork_architecture,
         show_every,
+        use_pretrained_cifar10,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -54,6 +56,7 @@ def main(arguments):
         arguments.num_subnetworks,
         arguments.subnetwork_architecture,
         arguments.show_every,
+        arguments.use_pretrained_cifar10,
     )
 
     results = dict()
@@ -95,6 +98,30 @@ def main(arguments):
                     dim=input_shape[1],
                     channel_dim=(1 if len(input_shape) < 4 else input_shape[3]),
                     num_classes=num_classes,
+                )
+            elif subnetwork_architecture == "resnet18":
+                subnetwork = ResNet18(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
+                )
+            elif subnetwork_architecture == "resnet34":
+                subnetwork = ResNet34(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
+                )
+            elif subnetwork_architecture == "resnet50":
+                subnetwork = ResNet50(
+                    input_shape=input_shape,
+                    num_classes=num_classes,
+                    learning_rate=learning_rate,
+                    blocks_to_freeze=4,
+                    use_pretrained_cifar10=use_pretrained_cifar10,
                 )
 
             model = Ensemble(
@@ -224,6 +251,13 @@ def parse_args():
         default="dnn",
         help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
     )
+    group.add_argument(
+        "--use_pretrained_cifar10",
+        required=False,
+        dest="use_pretrained_cifar10",
+        action="store_true",
+    )
+    group.set_defaults(use_pretrained_cifar10=False)
     arguments = parser.parse_args()
     return arguments
 
