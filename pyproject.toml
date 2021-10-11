@@ -3,7 +3,7 @@ name = "kwta-ensemble"
 version = "0.1.0"
 description = "k-Winners-take-All Ensemble Neural Network"
 authors = ["Abien Fred Agarap <abienfred.agarap@gmail.com>"]
-license = "GPL-2.0 License"
+license = "GNU AGPL v3.0 License"
 
 [tool.poetry.dependencies]
 python = "^3.8"
