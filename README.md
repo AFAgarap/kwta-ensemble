@@ -1,7 +1,7 @@
 k-Winners-Take-All Ensemble Neural Network
 ====
 
-The code repository will be available at [GitLab](https://gitlab.com/afagarap/kwta-ensemble).
+The source code is available upon request from the author. Please contact us through the email address written in our paper.
 
 
 ## License
