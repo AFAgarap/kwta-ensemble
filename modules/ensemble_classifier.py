@@ -43,6 +43,7 @@ def main(arguments):
         subnetwork_architecture,
         show_every,
         use_pretrained_cifar10,
+        num_blocks_to_freeze,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -57,6 +58,7 @@ def main(arguments):
         arguments.subnetwork_architecture,
         arguments.show_every,
         arguments.use_pretrained_cifar10,
+        arguments.num_blocks_to_freeze,
     )
 
     results = dict()
@@ -104,7 +106,7 @@ def main(arguments):
                     input_shape=input_shape,
                     num_classes=num_classes,
                     learning_rate=learning_rate,
-                    blocks_to_freeze=4,
+                    blocks_to_freeze=num_blocks_to_freeze,
                     use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet34":
@@ -112,7 +114,7 @@ def main(arguments):
                     input_shape=input_shape,
                     num_classes=num_classes,
                     learning_rate=learning_rate,
-                    blocks_to_freeze=4,
+                    blocks_to_freeze=num_blocks_to_freeze,
                     use_pretrained_cifar10=use_pretrained_cifar10,
                 )
             elif subnetwork_architecture == "resnet50":
@@ -120,7 +122,7 @@ def main(arguments):
                     input_shape=input_shape,
                     num_classes=num_classes,
                     learning_rate=learning_rate,
-                    blocks_to_freeze=4,
+                    blocks_to_freeze=num_blocks_to_freeze,
                     use_pretrained_cifar10=use_pretrained_cifar10,
                 )
 
@@ -256,6 +258,12 @@ def parse_args():
         required=False,
         dest="use_pretrained_cifar10",
         action="store_true",
+    )
+    group.add_argument(
+        "--num_blocks_to_freeze",
+        type=int,
+        default=4,
+        help="the number of ResNet blocks to freeze, default: [4]",
     )
     group.set_defaults(use_pretrained_cifar10=False)
     arguments = parser.parse_args()
