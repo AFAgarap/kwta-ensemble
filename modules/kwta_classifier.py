@@ -17,9 +17,11 @@
 import argparse
 
 import numpy as np
+from prefex.models.autoencoder import ConvolutionalAutoencoder
+from prefex.models.classifier import Prefex
 from soconne_baseline import ResNet18, ResNet34, ResNet50
 
-from kwta_ensemble.models import CNN, DNN, LeNet, kWTAEnsemble
+from kwta_ensemble.models import CNN, DNN, LeNet, PrefexDNN, kWTAEnsemble
 from kwta_ensemble.utils import (
     create_dataloaders,
     export_results,
@@ -90,7 +92,20 @@ def main(arguments: argparse.Namespace):
             input_shape = data_loaders.get("meta").get("input_shape")
             num_classes = data_loaders.get("meta").get("num_classes")
 
-            if subnetwork_architecture == "dnn":
+            if subnetwork_architecture == "prefex_dnn":
+                encoder = ConvolutionalAutoencoder(
+                    criterion="bce", optimizer="adamw", learning_rate=1e-3
+                )
+                encoder = Prefex(
+                    encoder=encoder.encoder,
+                    use_snnl=False,
+                    temperature=10.0,
+                    factor=1.0,
+                )
+                subnetwork_architecture = PrefexDNN(
+                    encoder=encoder, num_classes=num_classes
+                )
+            elif subnetwork_architecture == "dnn":
                 subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
             elif subnetwork_architecture == "cnn":
                 subnetwork = CNN(
@@ -261,7 +276,7 @@ def parse_args():
         "--subnetwork_architecture",
         type=str,
         default="dnn",
-        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
+        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet | prefex_dnn]",
     )
     group.add_argument(
         "-cd",
