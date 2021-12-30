@@ -97,17 +97,20 @@ expert_class_accuracies = compute_learner_accuracy_per_class(
     outputs=[outputs, *expert_logits], labels=labels
 )
 expert_outputs = list(
-    map(lambda output: torch.nn.functional.softmax(output), expert_outputs)
+    map(lambda output: torch.nn.functional.softmax(output), expert_logits)
 )
 
 outputs = torch.nn.functional.softmax(outputs)
 
 index = int(sys.argv[2])
+classes = test_data.classes
+if dataset == "mnist":
+    classes = list(map(lambda index: str(index), range(10)))
 plot_activations(
     index=index,
     features=features,
     labels=labels,
-    classes=test_data.classes,
+    classes=classes,
     outputs=expert_outputs,
     model_output=outputs,
 )
