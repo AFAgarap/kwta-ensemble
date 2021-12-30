@@ -5,6 +5,7 @@ class PrefexDNN(torch.nn.Module):
     def __init__(
         self,
         encoder: torch.nn.Sequential,
+        num_classes: int,
         device: torch.device = torch.device(
             "cuda" if torch.cuda.is_available() else "cpu"
         ),
