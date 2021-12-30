@@ -48,6 +48,7 @@ def main(arguments: argparse.Namespace):
         sparsity_factor,
         use_pretrained_cifar10,
         num_blocks_to_freeze,
+        prefex_path,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -65,6 +66,7 @@ def main(arguments: argparse.Namespace):
         arguments.sparsity_factor,
         arguments.use_pretrained_cifar10,
         arguments.num_blocks_to_freeze,
+        arguments.prefex_path,
     )
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
@@ -102,6 +104,7 @@ def main(arguments: argparse.Namespace):
                     temperature=10.0,
                     factor=1.0,
                 )
+                encoder.load_model(prefex_path)
                 subnetwork_architecture = PrefexDNN(
                     encoder=encoder, num_classes=num_classes
                 )
@@ -303,6 +306,9 @@ def parse_args():
         type=int,
         default=4,
         help="the number of ResNet blocks to freeze, default: [4]",
+    )
+    group.add_argument(
+        "--prefex_path", type=str, help="the path to the pretrained feature extractor."
     )
     group.set_defaults(use_pretrained_cifar10=False)
     arguments = parser.parse_args()
