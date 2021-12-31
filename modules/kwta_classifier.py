@@ -105,9 +105,7 @@ def main(arguments: argparse.Namespace):
                     factor=-1.0,
                 )
                 encoder.load_model(prefex_path)
-                subnetwork_architecture = PrefexDNN(
-                    encoder=encoder, num_classes=num_classes
-                )
+                subnetwork = PrefexDNN(encoder=encoder, num_classes=num_classes)
             elif subnetwork_architecture == "dnn":
                 subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
             elif subnetwork_architecture == "cnn":
