@@ -17,7 +17,7 @@ class PrefexDNN(torch.nn.Module):
             torch.nn.Linear(in_features=code_dim, out_features=100, bias=False),
             torch.nn.LeakyReLU(negative_slope=2e-2),
             torch.nn.Dropout(p=2e-1),
-            torch.nn.Linear(in_features=100, out_features=10, bias=False),
+            torch.nn.Linear(in_features=100, out_features=num_classes, bias=False),
         )
 
         self.device = device
