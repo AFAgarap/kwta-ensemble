@@ -15,7 +15,7 @@ class PrefexDNN(torch.nn.Module):
         self.layers = torch.nn.Sequential(
             *encoder[:-1],
             torch.nn.Linear(in_features=code_dim, out_features=100, bias=False),
-            torch.nn.ReLU(inplace=True),
+            torch.nn.LeakyReLU(negative_slope=2e-2),
             torch.nn.Dropout(p=2e-1),
             torch.nn.Linear(in_features=100, out_features=10, bias=False),
         )
