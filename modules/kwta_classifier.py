@@ -49,6 +49,7 @@ def main(arguments: argparse.Namespace):
         use_pretrained_cifar10,
         num_blocks_to_freeze,
         prefex_path,
+        use_snnl,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -67,6 +68,7 @@ def main(arguments: argparse.Namespace):
         arguments.use_pretrained_cifar10,
         arguments.num_blocks_to_freeze,
         arguments.prefex_path,
+        arguments.use_snnl,
     )
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
@@ -100,7 +102,7 @@ def main(arguments: argparse.Namespace):
                 )
                 encoder = Prefex(
                     encoder=encoder.encoder,
-                    use_snnl=False,
+                    use_snnl=use_snnl,
                     temperature=10.0,
                     factor=-1.0,
                 )
