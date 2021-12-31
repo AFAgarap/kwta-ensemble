@@ -11,7 +11,7 @@ class PrefexDNN(torch.nn.Module):
         ),
     ):
         super().__init__()
-        code_dim = encoder.layers[:-3][-1].out_features
+        code_dim = encoder.layers[:-2][-1].out_features
         self.layers = torch.nn.Sequential(
             *encoder.layers[:-2],
             torch.nn.Linear(in_features=code_dim, out_features=100),
