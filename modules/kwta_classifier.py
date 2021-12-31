@@ -96,13 +96,13 @@ def main(arguments: argparse.Namespace):
 
             if subnetwork_architecture == "prefex_dnn":
                 encoder = Autoencoder(
-                    criterion="bce", optimizer="adamw", learning_rate=1e-3
+                    code_dim=200, criterion="bce", optimizer="adamw", learning_rate=1e-3
                 )
                 encoder = Prefex(
                     encoder=encoder.encoder,
                     use_snnl=False,
                     temperature=10.0,
-                    factor=1.0,
+                    factor=-1.0,
                 )
                 encoder.load_model(prefex_path)
                 subnetwork_architecture = PrefexDNN(
