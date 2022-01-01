@@ -181,8 +181,8 @@ class Model(torch.nn.Module):
                     data_loaders=data_loaders, phase=phase
                 )
 
-                if phase == "train":
-                    self.scheduler.step(epoch)
+                if phase == "valid":
+                    self.scheduler.step(epoch_loss)
 
                 if phase == "train":
                     self.train_loss.append(epoch_loss)
