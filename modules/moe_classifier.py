@@ -288,7 +288,7 @@ def parse_args():
         "--subnetwork_architecture",
         type=str,
         default="dnn",
-        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
+        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet | prefex_dnn]",
     )
     group.add_argument(
         "--use_pretrained_cifar10",
