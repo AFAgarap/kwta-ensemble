@@ -302,7 +302,14 @@ def parse_args():
         default=4,
         help="the number of ResNet blocks to freeze, default: [4]",
     )
+    group.add_argument(
+        "--prefex_path", type=str, help="the path to the pretrained feature_extractor"
+    )
+    group.add_argument(
+        "--use_snnl", required=False, dest="use_snnl", action="store_true"
+    )
     group.set_defaults(use_pretrained_cifar10=False)
+    group.set_defaults(use_snnl=False)
     arguments = parser.parse_args()
     return arguments
 
