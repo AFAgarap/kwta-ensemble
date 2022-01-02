@@ -18,7 +18,7 @@ import argparse
 
 import numpy as np
 from prefex.models.autoencoder import Autoencoder
-from prefex.models.classifier import Prefex
+from prefex.models.supervised_ae import SupervisedAutoencoder
 from soconne_baseline import ResNet18, ResNet34, ResNet50
 
 from kwta_ensemble.models import CNN, DNN, LeNet, PrefexDNN, kWTAEnsemble
@@ -100,11 +100,14 @@ def main(arguments: argparse.Namespace):
                 encoder = Autoencoder(
                     code_dim=200, criterion="bce", optimizer="adamw", learning_rate=1e-3
                 )
-                encoder = Prefex(
-                    encoder=encoder.encoder,
+                encoder = SupervisedAutoencoder(
+                    code_dim=200,
+                    criterion="bce",
+                    optimizer="adamw",
+                    learning_rate=1e-1,
                     use_snnl=use_snnl,
                     temperature=10.0,
-                    factor=-1.0,
+                    factor=-10.0,
                 )
                 encoder.load_model(prefex_path)
                 subnetwork = PrefexDNN(encoder=encoder, num_classes=num_classes)
