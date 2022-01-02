@@ -48,6 +48,8 @@ class Model(torch.nn.Module):
             The device to use for computations.
         """
         super().__init__()
+        self.use_feature_extractor = use_feature_extractor
+        self.feature_extractor = feature_extractor
         self.criterion = torch.nn.CrossEntropyLoss()
         self.num_subnetworks = num_subnetworks
         self.device = device
