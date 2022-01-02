@@ -17,7 +17,7 @@
 import os
 import time
 from copy import deepcopy
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union
 
 import torch
 
@@ -30,6 +30,8 @@ class Model(torch.nn.Module):
     def __init__(
         self,
         num_subnetworks: int,
+        feature_extractor: Union[torch.nn.Module, torch.nn.Sequential],
+        use_feature_extractor: bool = False,
         device: torch.device = torch.device(
             "cuda:0" if torch.cuda.is_available else "cpu"
         ),
