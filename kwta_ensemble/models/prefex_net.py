@@ -23,5 +23,7 @@ class PrefexDNN(torch.nn.Module):
         self.to(self.device)
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
+        if len(features.shape) > 2:
+            features = features.view(features.shape[0], -1)
         logits = self.layers(features)
         return logits
