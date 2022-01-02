@@ -17,7 +17,6 @@
 import argparse
 
 import numpy as np
-from prefex.models.autoencoder import Autoencoder
 from prefex.models.supervised_ae import SupervisedAutoencoder
 from soconne_baseline import ResNet18, ResNet34, ResNet50
 
@@ -97,9 +96,6 @@ def main(arguments: argparse.Namespace):
             num_classes = data_loaders.get("meta").get("num_classes")
 
             if subnetwork_architecture == "prefex_dnn":
-                encoder = Autoencoder(
-                    code_dim=200, criterion="bce", optimizer="adamw", learning_rate=1e-3
-                )
                 encoder = SupervisedAutoencoder(
                     code_dim=200,
                     criterion="bce",
