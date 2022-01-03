@@ -103,6 +103,8 @@ class Ensemble(Model):
         logits: torch.Tensor
             The model outputs.
         """
+        if self.use_feature_extractor:
+            features = self.feature_extractor(features)
         outputs = []
         for network in self.model:
             outputs.append(network(features))
