@@ -289,8 +289,15 @@ def parse_args():
     group.add_argument(
         "--use_snnl", required=False, dest="use_snnl", action="store_true"
     )
+    group.add_argument(
+        "--use_feature_extractor",
+        required=False,
+        dest="use_feature_extractor",
+        action="store_true",
+    )
     group.set_defaults(use_pretrained_cifar10=False)
     group.set_defaults(use_snnl=False)
+    group.set_defaults(use_feature_extractor=False)
     arguments = parser.parse_args()
     return arguments
 
