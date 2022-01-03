@@ -49,6 +49,7 @@ def main(arguments: argparse.Namespace):
         num_blocks_to_freeze,
         prefex_path,
         use_snnl,
+        use_feature_extractor,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -68,6 +69,7 @@ def main(arguments: argparse.Namespace):
         arguments.num_blocks_to_freeze,
         arguments.prefex_path,
         arguments.use_snnl,
+        arguments.use_feature_extractor,
     )
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
@@ -95,20 +97,21 @@ def main(arguments: argparse.Namespace):
             input_shape = data_loaders.get("meta").get("input_shape")
             num_classes = data_loaders.get("meta").get("num_classes")
 
-            if subnetwork_architecture == "prefex_dnn":
-                encoder = SupervisedAutoencoder(
-                    code_dim=200,
-                    criterion="bce",
-                    optimizer="adamw",
-                    learning_rate=1e-1,
-                    use_snnl=use_snnl,
-                    temperature=10.0,
-                    factor=-10.0,
-                )
-                encoder.load_model(prefex_path)
-                subnetwork = PrefexDNN(encoder=encoder, num_classes=num_classes)
-            elif subnetwork_architecture == "dnn":
-                subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
+            if subnetwork_architecture == "dnn":
+                if use_feature_extractor:
+                    encoder = SupervisedAutoencoder(
+                        code_dim=200,
+                        criterion="bce",
+                        optimizer="adamw",
+                        learning_rate=1e-1,
+                        use_snnl=use_snnl,
+                        temperature=10.0,
+                        factor=-10.0,
+                    )
+                    encoder.load_model(prefex_path)
+                    subnetwork = DNN(units=((200, 100), (100, num_classes)))
+                else:
+                    subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
             elif subnetwork_architecture == "cnn":
                 subnetwork = CNN(
                     dim=input_shape[1],
@@ -155,6 +158,8 @@ def main(arguments: argparse.Namespace):
                 optimizer=optimizer,
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
+                use_feature_extractor=use_feature_extractor,
+                feature_extractor=encoder,
             )
             model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
             accuracy = model.score(test_loader)
