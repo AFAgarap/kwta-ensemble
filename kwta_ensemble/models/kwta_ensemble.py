@@ -135,7 +135,7 @@ class kWTAEnsemble(Model):
             The model outputs.
         """
         if self.use_feature_extractor:
-            features = self.feature_extractor(features)
+            features = self.feature_extractor.encoder(features)
         outputs = []
         for index in range(self.num_subnetworks):
             output = self.experts[index](features)
