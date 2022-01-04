@@ -17,6 +17,8 @@
 import argparse
 
 import numpy as np
+from prefex.models.autoencoder import Autoencoder
+from prefex.models.classifier import Prefex
 from prefex.models.supervised_ae import SupervisedAutoencoder
 from soconne_baseline import ResNet18, ResNet34, ResNet50
 
@@ -99,8 +101,23 @@ def main(arguments: argparse.Namespace):
 
             if subnetwork_architecture == "dnn":
                 if use_feature_extractor:
+                    # encoder = Autoencoder(
+                    #     code_dim=50,
+                    #     criterion="bce",
+                    #     learning_rate=1e-2,
+                    #     optimizer="adamw",
+                    # )
+                    # print(encoder)
+                    # encoder = Prefex(
+                    #     encoder=encoder.encoder,
+                    #     learning_rate=1e-1,
+                    #     use_snnl=use_snnl,
+                    #     temperature=10.0,
+                    #     factor=-10.0
+                    # )
+                    # print(encoder)
                     encoder = SupervisedAutoencoder(
-                        code_dim=200,
+                        code_dim=50,
                         criterion="bce",
                         optimizer="adamw",
                         learning_rate=1e-1,
@@ -109,7 +126,8 @@ def main(arguments: argparse.Namespace):
                         factor=-10.0,
                     )
                     encoder.load_model(prefex_path)
-                    subnetwork = DNN(units=((200, 100), (100, num_classes)))
+                    print(encoder.score(test_loader))
+                    subnetwork = DNN(units=((50, 100), (100, num_classes)))
                 else:
                     subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
             elif subnetwork_architecture == "cnn":
@@ -159,8 +177,12 @@ def main(arguments: argparse.Namespace):
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
                 use_feature_extractor=use_feature_extractor,
-                feature_extractor=encoder,
+                # feature_extractor=encoder.layers[:-2],
+                feature_extractor=encoder.encoder[:-1],
             )
+            from torchsummary import summary
+
+            print(summary(model, (1, 784)))
             model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
             accuracy = model.score(test_loader)
             accuracies.append(accuracy)
