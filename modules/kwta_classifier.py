@@ -190,7 +190,8 @@ def main(arguments: argparse.Namespace):
                 weight_decay=weight_decay,
                 use_feature_extractor=use_feature_extractor,
                 # feature_extractor=encoder.layers[:-2],
-                feature_extractor=encoder.encoder[:-1],
+                # feature_extractor=encoder.encoder[:-1],
+                feature_extractor=encoder.layers[:7]
             )
             from torchsummary import summary
 
