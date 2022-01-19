@@ -17,8 +17,8 @@
 import argparse
 
 import numpy as np
-from prefex.models.autoencoder import Autoencoder
 from prefex.models.classifier import Prefex
+from prefex.models.snnl_ae import Autoencoder
 from prefex.models.supervised_ae import SupervisedAutoencoder
 from soconne_baseline import ResNet18, ResNet34, ResNet50
 
@@ -116,18 +116,31 @@ def main(arguments: argparse.Namespace):
                     #     factor=-10.0
                     # )
                     # print(encoder)
-                    encoder = SupervisedAutoencoder(
-                        code_dim=50,
+                    # encoder = SupervisedAutoencoder(
+                    #     code_dim=50,
+                    #     criterion="bce",
+                    #     optimizer="adamw",
+                    #     learning_rate=1e-1,
+                    #     use_snnl=use_snnl,
+                    #     temperature=10.0,
+                    #     factor=-10.0,
+                    # )
+                    encoder = Autoencoder(
+                        num_features=num_features,
+                        code_dim=200,
                         criterion="bce",
                         optimizer="adamw",
-                        learning_rate=1e-1,
+                        learning_rate=1e-3,
+                        use_lr_scheduling=True,
                         use_snnl=use_snnl,
-                        temperature=10.0,
-                        factor=-10.0,
+                        temperature=100.0,
+                        factor=100.0,
+                        mode="latent_code",
+                        code_units=int(0.70 * 200),
                     )
                     encoder.load_model(prefex_path)
                     print(encoder.score(test_loader))
-                    subnetwork = DNN(units=((50, 100), (100, num_classes)))
+                    subnetwork = DNN(units=((200, 100), (100, num_classes)))
                 else:
                     subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
             elif subnetwork_architecture == "cnn":
