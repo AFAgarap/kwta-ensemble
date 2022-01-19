@@ -139,7 +139,6 @@ def main(arguments: argparse.Namespace):
                         code_units=int(0.70 * 200),
                     )
                     encoder.load_model(prefex_path)
-                    print(encoder.score(test_loader))
                     subnetwork = DNN(units=((200, 100), (100, num_classes)))
                 else:
                     subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
