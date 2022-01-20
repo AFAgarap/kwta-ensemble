@@ -167,9 +167,6 @@ def main(arguments: argparse.Namespace):
                 use_feature_extractor=use_feature_extractor,
                 feature_extractor=encoder.layers[:7],
             )
-            from torchsummary import summary
-
-            print(summary(model, (1, 784)))
             model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
             accuracy = model.score(test_loader)
             accuracies.append(accuracy)
