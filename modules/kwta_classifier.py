@@ -188,6 +188,7 @@ def main(arguments: argparse.Namespace):
                 competition_delay=competition_delay,
                 sparsity_factor=sparsity_factor,
             )
+            filename = f"{filename}-{use_snnl}-snnl"
             model.save_model(filename=f"{seed}-seed-{filename}")
         print()
         print("=" * 40)
