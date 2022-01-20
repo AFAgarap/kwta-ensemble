@@ -100,22 +100,23 @@ def main(arguments: argparse.Namespace):
             num_classes = data_loaders.get("meta").get("num_classes")
 
             if subnetwork_architecture == "dnn":
+                code_dim = 50
                 if use_feature_extractor:
                     encoder = Autoencoder(
                         num_features=num_features,
-                        code_dim=200,
+                        code_dim=code_dim,
                         criterion="bce",
-                        optimizer="sgd",
+                        optimizer="adamw",
                         learning_rate=1e-3,
                         use_lr_scheduling=True,
                         use_snnl=use_snnl,
-                        temperature=100.0,
-                        factor=100.0,
-                        mode="latent_code",
-                        code_units=int(0.70 * 200),
+                        temperature=1.0,
+                        factor=1.0,
+                        mode="autoencoding",
+                        code_units=code_dim,
                     )
                     encoder.load_model(prefex_path)
-                    subnetwork = DNN(units=((200, 100), (100, num_classes)))
+                    subnetwork = DNN(units=((code_dim, 100), (100, num_classes)))
                 else:
                     subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
             elif subnetwork_architecture == "cnn":
@@ -165,7 +166,7 @@ def main(arguments: argparse.Namespace):
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
                 use_feature_extractor=use_feature_extractor,
-                feature_extractor=encoder.layers[:7],
+                feature_extractor=encoder.layers[:8],
             )
             model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
             accuracy = model.score(test_loader)
