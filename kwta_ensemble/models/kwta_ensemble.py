@@ -137,7 +137,6 @@ class kWTAEnsemble(Model):
         if self.use_feature_extractor:
             if len(features.shape) > 2:
                 features = features.view(features.shape[0], -1)
-            # features = self.feature_extractor[:-1](features)
             features = self.feature_extractor(features)
         outputs = []
         for index in range(self.num_subnetworks):
