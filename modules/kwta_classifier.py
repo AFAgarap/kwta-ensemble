@@ -101,30 +101,6 @@ def main(arguments: argparse.Namespace):
 
             if subnetwork_architecture == "dnn":
                 if use_feature_extractor:
-                    # encoder = Autoencoder(
-                    #     code_dim=50,
-                    #     criterion="bce",
-                    #     learning_rate=1e-2,
-                    #     optimizer="adamw",
-                    # )
-                    # print(encoder)
-                    # encoder = Prefex(
-                    #     encoder=encoder.encoder,
-                    #     learning_rate=1e-1,
-                    #     use_snnl=use_snnl,
-                    #     temperature=10.0,
-                    #     factor=-10.0
-                    # )
-                    # print(encoder)
-                    # encoder = SupervisedAutoencoder(
-                    #     code_dim=50,
-                    #     criterion="bce",
-                    #     optimizer="adamw",
-                    #     learning_rate=1e-1,
-                    #     use_snnl=use_snnl,
-                    #     temperature=10.0,
-                    #     factor=-10.0,
-                    # )
                     encoder = Autoencoder(
                         num_features=num_features,
                         code_dim=200,
@@ -189,8 +165,6 @@ def main(arguments: argparse.Namespace):
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
                 use_feature_extractor=use_feature_extractor,
-                # feature_extractor=encoder.layers[:-2],
-                # feature_extractor=encoder.encoder[:-1],
                 feature_extractor=encoder.layers[:7],
             )
             from torchsummary import summary
