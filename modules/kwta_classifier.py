@@ -129,7 +129,7 @@ def main(arguments: argparse.Namespace):
                         num_features=num_features,
                         code_dim=200,
                         criterion="bce",
-                        optimizer="adamw",
+                        optimizer="sgd",
                         learning_rate=1e-3,
                         use_lr_scheduling=True,
                         use_snnl=use_snnl,
@@ -191,7 +191,7 @@ def main(arguments: argparse.Namespace):
                 use_feature_extractor=use_feature_extractor,
                 # feature_extractor=encoder.layers[:-2],
                 # feature_extractor=encoder.encoder[:-1],
-                feature_extractor=encoder.layers[:7]
+                feature_extractor=encoder.layers[:7],
             )
             from torchsummary import summary
 
