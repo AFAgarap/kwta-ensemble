@@ -18,9 +18,11 @@ import argparse
 
 import numpy as np
 from moe.models import MoE
+from prefex.models.autoencoder import Autoencoder
+from prefex.models.classifier import Prefex
 from soconne_baseline import ResNet18, ResNet34, ResNet50
 
-from kwta_ensemble.models import CNN, DNN, LeNet
+from kwta_ensemble.models import CNN, DNN, LeNet, PrefexDNN
 from kwta_ensemble.utils import (
     create_dataloaders,
     export_results,
@@ -45,6 +47,8 @@ def main(arguments: argparse.Namespace):
         subnetwork_architecture,
         use_pretrained_cifar10,
         num_blocks_to_freeze,
+        prefex_path,
+        use_snnl,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -60,6 +64,8 @@ def main(arguments: argparse.Namespace):
         arguments.subnetwork_architecture,
         arguments.use_pretrained_cifar10,
         arguments.num_blocks_to_freeze,
+        arguments.prefex_path,
+        arguments.use_snnl,
     )
 
     results = dict()
@@ -88,7 +94,19 @@ def main(arguments: argparse.Namespace):
             input_shape = data_loaders.get("meta").get("input_shape")
             num_classes = data_loaders.get("meta").get("num_classes")
 
-            if subnetwork_architecture == "dnn":
+            if subnetwork_architecture == "prefex_dnn":
+                encoder = Autoencoder(
+                    code_dim=200, criterion="bce", optimizer="adamw", learning_rate=1e-3
+                )
+                encoder = Prefex(
+                    encoder=encoder.encoder,
+                    use_snnl=use_snnl,
+                    temperature=10.0,
+                    factor=-1.0,
+                )
+                encoder.load_model(prefex_path)
+                subnetwork = PrefexDNN(encoder=encoder, num_classes=num_classes)
+            elif subnetwork_architecture == "dnn":
                 subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
                 gating = DNN(units=((num_features, 100), (100, num_subnetwork)))
             elif subnetwork_architecture == "cnn":
@@ -288,7 +306,7 @@ def parse_args():
         "--subnetwork_architecture",
         type=str,
         default="dnn",
-        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
+        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet | prefex_dnn]",
     )
     group.add_argument(
         "--use_pretrained_cifar10",
@@ -302,7 +320,21 @@ def parse_args():
         default=4,
         help="the number of ResNet blocks to freeze, default: [4]",
     )
+    group.add_argument(
+        "--prefex_path", type=str, help="the path to the pretrained feature_extractor"
+    )
+    group.add_argument(
+        "--use_snnl", required=False, dest="use_snnl", action="store_true"
+    )
+    group.add_argument(
+        "--use_feature_extractor",
+        required=False,
+        dest="use_feature_extractor",
+        action="store_true",
+    )
     group.set_defaults(use_pretrained_cifar10=False)
+    group.set_defaults(use_snnl=False)
+    group.set_defaults(use_feature_extractor=False)
     arguments = parser.parse_args()
     return arguments
 

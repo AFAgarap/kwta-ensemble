@@ -17,9 +17,12 @@
 import argparse
 
 import numpy as np
+from prefex.models.classifier import Prefex
+from prefex.models.snnl_ae import Autoencoder
+from prefex.models.supervised_ae import SupervisedAutoencoder
 from soconne_baseline import ResNet18, ResNet34, ResNet50
 
-from kwta_ensemble.models import CNN, DNN, LeNet, kWTAEnsemble
+from kwta_ensemble.models import CNN, DNN, LeNet, PrefexDNN, kWTAEnsemble
 from kwta_ensemble.utils import (
     create_dataloaders,
     export_results,
@@ -46,6 +49,9 @@ def main(arguments: argparse.Namespace):
         sparsity_factor,
         use_pretrained_cifar10,
         num_blocks_to_freeze,
+        prefex_path,
+        use_snnl,
+        use_feature_extractor,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -63,6 +69,9 @@ def main(arguments: argparse.Namespace):
         arguments.sparsity_factor,
         arguments.use_pretrained_cifar10,
         arguments.num_blocks_to_freeze,
+        arguments.prefex_path,
+        arguments.use_snnl,
+        arguments.use_feature_extractor,
     )
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
@@ -91,7 +100,24 @@ def main(arguments: argparse.Namespace):
             num_classes = data_loaders.get("meta").get("num_classes")
 
             if subnetwork_architecture == "dnn":
-                subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
+                if use_feature_extractor:
+                    encoder = Autoencoder(
+                        num_features=num_features,
+                        code_dim=200,
+                        criterion="bce",
+                        optimizer="sgd",
+                        learning_rate=1e-3,
+                        use_lr_scheduling=True,
+                        use_snnl=use_snnl,
+                        temperature=100.0,
+                        factor=100.0,
+                        mode="latent_code",
+                        code_units=int(0.70 * 200),
+                    )
+                    encoder.load_model(prefex_path)
+                    subnetwork = DNN(units=((200, 100), (100, num_classes)))
+                else:
+                    subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
             elif subnetwork_architecture == "cnn":
                 subnetwork = CNN(
                     dim=input_shape[1],
@@ -138,6 +164,8 @@ def main(arguments: argparse.Namespace):
                 optimizer=optimizer,
                 learning_rate=learning_rate,
                 weight_decay=weight_decay,
+                use_feature_extractor=use_feature_extractor,
+                feature_extractor=encoder.layers[:7],
             )
             model.fit(train_loader, valid_loader, epochs=epochs, show_every=show_every)
             accuracy = model.score(test_loader)
@@ -261,7 +289,7 @@ def parse_args():
         "--subnetwork_architecture",
         type=str,
         default="dnn",
-        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet]",
+        help="the architecture to use for an expert, options: [cnn | dnn (default) | lenet | prefex_dnn]",
     )
     group.add_argument(
         "-cd",
@@ -289,7 +317,21 @@ def parse_args():
         default=4,
         help="the number of ResNet blocks to freeze, default: [4]",
     )
+    group.add_argument(
+        "--prefex_path", type=str, help="the path to the pretrained feature extractor."
+    )
+    group.add_argument(
+        "--use_snnl", required=False, dest="use_snnl", action="store_true"
+    )
+    group.add_argument(
+        "--use_feature_extractor",
+        required=False,
+        dest="use_feature_extractor",
+        action="store_true",
+    )
     group.set_defaults(use_pretrained_cifar10=False)
+    group.set_defaults(use_snnl=False)
+    group.set_defaults(use_feature_extractor=False)
     arguments = parser.parse_args()
     return arguments
 

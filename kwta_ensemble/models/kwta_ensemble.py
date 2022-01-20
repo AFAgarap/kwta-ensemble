@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """Implementation of kWTA-ENN"""
 from copy import deepcopy
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union
 
 import torch
 
@@ -28,6 +28,8 @@ class kWTAEnsemble(Model):
         self,
         num_classes: int,
         expert_model: torch.nn.Module,
+        feature_extractor: Union[torch.nn.Module, torch.nn.Sequential],
+        use_feature_extractor: bool = False,
         num_subnetworks: int = 2,
         sparsity: float = 0.75,
         competition_delay: int = 3,
@@ -70,7 +72,11 @@ class kWTAEnsemble(Model):
             The device to use for computation.
             Default: cuda:0
         """
-        super().__init__(num_subnetworks=num_subnetworks)
+        super().__init__(
+            num_subnetworks=num_subnetworks,
+            use_feature_extractor=use_feature_extractor,
+            feature_extractor=feature_extractor,
+        )
         self.num_subnetworks = num_subnetworks
         self.experts = torch.nn.Sequential()
         for index in range(self.num_subnetworks):
@@ -128,6 +134,10 @@ class kWTAEnsemble(Model):
         outputs: torch.Tensor
             The model outputs.
         """
+        if self.use_feature_extractor:
+            if len(features.shape) > 2:
+                features = features.view(features.shape[0], -1)
+            features = self.feature_extractor(features)
         outputs = []
         for index in range(self.num_subnetworks):
             output = self.experts[index](features)

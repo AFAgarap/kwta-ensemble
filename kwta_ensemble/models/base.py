@@ -17,7 +17,7 @@
 import os
 import time
 from copy import deepcopy
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union
 
 import torch
 
@@ -30,6 +30,8 @@ class Model(torch.nn.Module):
     def __init__(
         self,
         num_subnetworks: int,
+        feature_extractor: Union[torch.nn.Module, torch.nn.Sequential],
+        use_feature_extractor: bool = False,
         device: torch.device = torch.device(
             "cuda:0" if torch.cuda.is_available else "cpu"
         ),
@@ -46,6 +48,8 @@ class Model(torch.nn.Module):
             The device to use for computations.
         """
         super().__init__()
+        self.use_feature_extractor = use_feature_extractor
+        self.feature_extractor = torch.nn.Sequential(*feature_extractor)
         self.criterion = torch.nn.CrossEntropyLoss()
         self.num_subnetworks = num_subnetworks
         self.device = device
@@ -181,8 +185,8 @@ class Model(torch.nn.Module):
                     data_loaders=data_loaders, phase=phase
                 )
 
-                if phase == "train":
-                    self.scheduler.step(epoch)
+                if phase == "valid":
+                    self.scheduler.step(epoch_loss)
 
                 if phase == "train":
                     self.train_loss.append(epoch_loss)

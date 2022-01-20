@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """Implementation of ensemble neural network"""
 from copy import deepcopy
+from typing import Union
 
 import torch
 
@@ -25,6 +26,8 @@ class Ensemble(Model):
     def __init__(
         self,
         network: torch.nn.Module,
+        feature_extractor: Union[torch.nn.Module, torch.nn.Sequential],
+        use_feature_extractor: bool = False,
         num_subnetworks: int = 3,
         optimizer: str = "sgd",
         learning_rate: float = 1e-3,
@@ -51,7 +54,11 @@ class Ensemble(Model):
         device: torch.device
             The device to use for computation.
         """
-        super().__init__(num_subnetworks=num_subnetworks)
+        super().__init__(
+            num_subnetworks=num_subnetworks,
+            use_feature_extractor=use_feature_extractor,
+            feature_extractor=feature_extractor,
+        )
         self.model = torch.nn.Sequential()
         for index in range(self.num_subnetworks):
             network = deepcopy(network)
@@ -96,6 +103,8 @@ class Ensemble(Model):
         logits: torch.Tensor
             The model outputs.
         """
+        if self.use_feature_extractor:
+            features = self.feature_extractor(features)
         outputs = []
         for network in self.model:
             outputs.append(network(features))
