@@ -52,6 +52,7 @@ def main(arguments: argparse.Namespace):
         prefex_path,
         use_snnl,
         use_feature_extractor,
+        freeze_encoder,
     ) = (
         arguments.seeds,
         arguments.dataset,
@@ -72,6 +73,7 @@ def main(arguments: argparse.Namespace):
         arguments.prefex_path,
         arguments.use_snnl,
         arguments.use_feature_extractor,
+        arguments.freeze_encoder,
     )
     results = dict()
     for num_subnetwork in range(2, num_subnetworks + 1):
@@ -116,6 +118,11 @@ def main(arguments: argparse.Namespace):
                         code_units=code_dim,
                     )
                     encoder.load_model(prefex_path)
+                    if freeze_encoder:
+                        for index, layer in list(encoder.layers.named_children())[:8]:
+                            if int(index) < 4:
+                                for parameters in layer.parameters():
+                                    parameters.requires_grad = False
                     subnetwork = DNN(units=((code_dim, 100), (100, num_classes)))
                 else:
                     subnetwork = DNN(units=((num_features, 100), (100, num_classes)))
@@ -189,6 +196,7 @@ def main(arguments: argparse.Namespace):
                 sparsity_factor=sparsity_factor,
             )
             filename = f"{filename}-{use_snnl}-snnl"
+            filename = f"{filename}-{freeze_encoder}-freeze_encoder"
             model.save_model(filename=f"{seed}-seed-{filename}")
         print()
         print("=" * 40)
@@ -331,9 +339,13 @@ def parse_args():
         dest="use_feature_extractor",
         action="store_true",
     )
+    group.add_argument(
+        "--freeze_encoder", required=False, dest="freeze_encoder", action="store_true"
+    )
     group.set_defaults(use_pretrained_cifar10=False)
     group.set_defaults(use_snnl=False)
     group.set_defaults(use_feature_extractor=False)
+    group.set_defaults(freeze_encoder=False)
     arguments = parser.parse_args()
     return arguments
 
