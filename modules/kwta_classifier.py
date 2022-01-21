@@ -195,9 +195,10 @@ def main(arguments: argparse.Namespace):
                 competition_delay=competition_delay,
                 sparsity_factor=sparsity_factor,
             )
+            filename = f"{seed}-seed-{filename}"
             filename = f"{filename}-{use_snnl}-snnl"
             filename = f"{filename}-{freeze_encoder}-freeze_encoder"
-            model.save_model(filename=f"{seed}-seed-{filename}")
+            model.save_model(filename=filename)
         print()
         print("=" * 40)
         print(f"AVG ACC = {np.mean(accuracies):.4f}")
