@@ -92,7 +92,18 @@ encoder = Autoencoder(
     code_units=50,
 )
 learner = DNN(units=((50, 100), (100, 10)))
-model = kWTAEnsemble(expert_model=learner, num_subnetworks=num_learners, num_classes=10)
+model = kWTAEnsemble(
+    expert_model=learner,
+    num_subnetworks=num_learners,
+    num_classes=10,
+    sparsity=0.75,
+    competition_delay=0,
+    optimizer="sgd",
+    learning_rate=1e-3,
+    weight_decay=1e-5,
+    use_feature_extractor=True,
+    feature_extractor=encoder.layers[:8],
+)
 model.load_model(filename)
 model = model.cpu()
 
