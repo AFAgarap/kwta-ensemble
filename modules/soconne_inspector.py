@@ -18,6 +18,7 @@ import sys
 from typing import List
 
 import torch
+from prefex.models.snnl_ae import Autoencoder
 from pt_datasets import create_dataloader, load_dataset
 from sklearn.metrics import classification_report
 
@@ -66,6 +67,7 @@ def compute_expert_wta_outputs(
 
 
 filename = sys.argv[1]
+use_snnl = sys.argv[2]
 seed = int(filename.split("-", 6)[0])
 model = filename.split("-", 6)[2]
 num_learners = int(filename.split("-", 6)[3])
@@ -76,7 +78,20 @@ set_global_seed(seed)
 _, test_data = load_dataset(dataset)
 test_loader = create_dataloader(test_data, batch_size=len(test_data), shuffle=False)
 
-learner = DNN(units=((784, 100), (100, 10)))
+encoder = Autoencoder(
+    num_features=784,
+    code_dim=50,
+    criterion="bce",
+    optimizer="adamw",
+    learning_rate=1e-3,
+    use_lr_scheduling=True,
+    use_snnl=(True if use_snnl == "True" else False),
+    temperature=1.0,
+    factor=1.0,
+    mode="autoencoding",
+    code_units=50,
+)
+learner = DNN(units=((50, 100), (100, 10)))
 model = kWTAEnsemble(expert_model=learner, num_subnetworks=num_learners, num_classes=10)
 model.load_model(filename)
 model = model.cpu()
