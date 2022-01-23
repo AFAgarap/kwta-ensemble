@@ -113,7 +113,8 @@ for features, labels in test_loader:
 
 report = classification_report(outputs.argmax(1).detach().numpy(), labels.numpy())
 
-expert_outputs = list(map(lambda expert: expert(features), model.experts))
+encoded_features = model.feature_extractor(features.view(features.shape[0], -1))
+expert_outputs = list(map(lambda expert: expert(encoded_features), model.experts))
 expert_logits = compute_expert_wta_outputs(model, expert_outputs, len(test_data))
 expert_accuracies = compute_learner_accuracy(outputs=expert_logits, labels=labels)
 expert_reports = compute_learner_classification_report(
