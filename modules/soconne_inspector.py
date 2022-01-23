@@ -129,7 +129,7 @@ expert_outputs = list(
 
 outputs = torch.nn.functional.softmax(outputs)
 
-index = int(sys.argv[2])
+index = int(sys.argv[3])
 classes = test_data.classes
 if dataset == "mnist":
     classes = list(map(lambda index: str(index), range(10)))
