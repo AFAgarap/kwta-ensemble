@@ -157,3 +157,28 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
+
+
+Citation:
+
+- APA
+```
+Agarap, A. F., & Azcarraga, A. P. (2021, December). k-Winners-Take-All Ensemble Neural Network. In International Conference on Neural Information Processing (pp. 250-261). Cham: Springer International Publishing.
+```
+
+- MLA
+```
+Agarap, Abien Fred, and Arnulfo P. Azcarraga. "k-Winners-Take-All Ensemble Neural Network." International Conference on Neural Information Processing. Cham: Springer International Publishing, 2021.
+```
+
+- BibTeX
+```
+@inproceedings{agarap2021k,
+  title={k-Winners-Take-All Ensemble Neural Network},
+  author={Agarap, Abien Fred and Azcarraga, Arnulfo P},
+  booktitle={International Conference on Neural Information Processing},
+  pages={250--261},
+  year={2021},
+  organization={Springer}
+}
+```
