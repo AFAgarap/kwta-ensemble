@@ -159,7 +159,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
 
-Citation:
+## Citation
+
+You may cite our paper through any of the formats,
 
 - APA
 ```
